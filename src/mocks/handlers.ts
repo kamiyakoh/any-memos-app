@@ -8,23 +8,23 @@ interface LoginBody {
 // モックAPIのハンドラーを定義
 export const handlers = [
   rest.post('/api/login', async (req, res, ctx) => {
-    const requestBody = await req.json();
+    const requestBody: LoginBody = await req.json();
 
-    if (!requestBody) {
-      return res(ctx.status(400), ctx.json({ message: 'Invalid request body' }));
+    if (requestBody === null) {
+      return await res(ctx.status(400), ctx.json({ message: 'Invalid request body' }));
     }
 
-    const { email, password } = requestBody as LoginBody;
+    const { email, password } = requestBody;
 
     // 仮のユーザー名とパスワードでモックのJWTを返す例
     if (email === 'hoge@example.com' && password === 'exam') {
-      return res(
+      return await res(
         ctx.json({
           token: 'mock-jwt-token',
         }),
       );
     } else {
-      return res(ctx.status(401), ctx.json({ message: 'Not authorized' }));
+      return await res(ctx.status(401), ctx.json({ message: 'Not authorized' }));
     }
   }),
 ];

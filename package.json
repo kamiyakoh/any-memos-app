@@ -55,5 +55,8 @@
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.33.1",
     "prettier": "^3.0.0"
+  },
+  "msw": {
+    "workerDirectory": "public"
   }
 }

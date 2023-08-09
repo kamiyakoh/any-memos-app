@@ -12,7 +12,7 @@ export const Login: FC = () => {
       .then((tokenData) => {
         const expirationDate = new Date().getTime() + 24 * 60 * 60 * 1000;
         localStorage.setItem('token', tokenData.token);
-        localStorage.setItem('tokenExpiration', expirationDate.toString());
+        localStorage.setItem('tokenExp', expirationDate.toString());
         console.log('Login successful!');
         navigate('/dashboard');
       })

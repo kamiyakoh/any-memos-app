@@ -1,5 +1,4 @@
 import type { MemoBody } from '../../mocks/handlers';
-// import { response } from 'msw';
 import { FC, useState } from 'react';
 
 interface ErrorMessage {

@@ -1,5 +1,7 @@
 import type { MemoBody } from '../../mocks/handlers';
 import { FC, useState, useEffect } from 'react';
+import { Modal } from '../projects/Modal';
+import { EditMemo } from '../projects/EditMemo';
 
 interface MemosData {
   memos: MemoBody[];
@@ -7,6 +9,8 @@ interface MemosData {
 
 export const Memos: FC = () => {
   const [memos, setMeoms] = useState<null | MemoBody[]>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editId, setEditId] = useState('');
   useEffect(() => {
     fetch('/api/memos', {
       method: 'GET',
@@ -34,6 +38,14 @@ export const Memos: FC = () => {
     }
   };
 
+  const openModal = (id: string): void => {
+    setEditId(id);
+    setIsModalOpen(true);
+  };
+  const closeModal = (): void => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div>
       {memos !== null ? (
@@ -42,7 +54,15 @@ export const Memos: FC = () => {
             <p>id: {m.id}</p>
             <p>title: {m.title}</p>
             <div>{mark(m.markDiv)}</div>
-            <br />
+            <button
+              className="px-4 py-2 bg-blue-500 rounded hover:bg-blue-600"
+              onClick={() => {
+                openModal(m.id);
+              }}
+            >
+              Edit
+            </button>
+            <hr />
           </div>
         ))
       ) : (
@@ -50,6 +70,9 @@ export const Memos: FC = () => {
           <p>Loading ...</p>
         </div>
       )}
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <EditMemo memos={memos ?? []} id={editId} closeModal={closeModal} />
+      </Modal>
     </div>
   );
 };

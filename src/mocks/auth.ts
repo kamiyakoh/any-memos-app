@@ -2,7 +2,8 @@ import axios from 'axios';
 import type { AxiosResponse } from 'axios';
 
 interface LoginResData {
-  token: string;
+  accessToken: string;
+  accessTokenExp: string;
 }
 
 export const login = async (email: string, password: string): Promise<LoginResData> => {

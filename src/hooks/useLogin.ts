@@ -1,18 +1,31 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import type { UseFormRegister, UseFormHandleSubmit } from 'react-hook-form';
+import { useState, useCallback } from 'react';
+import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import { login } from '../mocks/auth';
 
+interface InputLogin {
+  email: string;
+  password: string;
+}
 interface UseLogin {
-  loginErrorMessage: string;
+  isAuth: boolean;
+  register: UseFormRegister<InputLogin>;
+  handleSubmit: UseFormHandleSubmit<InputLogin>;
   fetchIsAuth: () => void;
-  handleLogin: (email: string, password: string) => void;
+  handleLogin: (data: InputLogin) => void;
 }
 
 export const useLogin = (): UseLogin => {
-  const navigate = useNavigate();
-  const [loginErrorMessage, setloginErrorMessage] = useState('');
+  const [isAuth, setIsAuth] = useState<boolean>(false);
 
-  const fetchIsAuth = (): void => {
+  const { register, handleSubmit } = useForm<InputLogin>({
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+  const fetchIsAuth = useCallback((): void => {
     fetch('/api/memos', {
       method: 'GET',
       headers: {
@@ -21,27 +34,30 @@ export const useLogin = (): UseLogin => {
     })
       .then((response) => {
         if (response.ok) {
-          navigate('/dashboard');
+          if (!isAuth) setIsAuth(true);
         } else {
-          console.log(response.json());
+          if (isAuth) setIsAuth(false);
         }
       })
-      .catch((error) => {
-        console.error('エラーが発生しました:', error);
+      .catch(() => {
+        if (isAuth) setIsAuth(false);
+        toast.error('ログイン認証に失敗しました');
       });
-  };
+  }, [isAuth]);
 
-  const handleLogin = (email: string, password: string): void => {
+  const handleLogin = useCallback((data: InputLogin): void => {
+    const email = data.email;
+    const password = data.password;
     login(email, password)
       .then((tokenData) => {
         localStorage.setItem('accessToken', tokenData.accessToken);
         localStorage.setItem('accessTokenExp', tokenData.accessTokenExp);
-        navigate('/dashboard');
+        window.location.reload();
       })
       .catch(() => {
-        setloginErrorMessage('メールアドレスまたはパスワードが違います');
+        toast.error('メールアドレスまたは\nパスワードが違います');
       });
-  };
+  }, []);
 
-  return { loginErrorMessage, fetchIsAuth, handleLogin };
+  return { isAuth, register, handleSubmit, fetchIsAuth, handleLogin };
 };

@@ -1,19 +1,34 @@
 import { useState } from 'react';
 
 interface UseHandleModal {
-  isModalOpen: boolean;
-  openModal: () => void;
+  isOpenLogin: boolean;
+  isOpenMenu: boolean;
+  isOpenNew: boolean;
+  openLogin: () => void;
+  openMenu: () => void;
+  openNew: () => void;
   closeModal: () => void;
 }
 
 export const useHandleModal = (): UseHandleModal => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModal = (): void => {
-    setIsModalOpen(true);
+  const [isOpenLogin, setIsOpenLogin] = useState<boolean>(false);
+  const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
+  const [isOpenNew, setIsOpenNew] = useState<boolean>(false);
+
+  const openLogin = (): void => {
+    setIsOpenLogin(true);
+  };
+  const openMenu = (): void => {
+    setIsOpenMenu(true);
+  };
+  const openNew = (): void => {
+    setIsOpenNew(true);
   };
   const closeModal = (): void => {
-    setIsModalOpen(false);
+    setIsOpenLogin(false);
+    setIsOpenMenu(false);
+    setIsOpenNew(false);
   };
 
-  return { isModalOpen, openModal, closeModal };
+  return { isOpenLogin, isOpenMenu, isOpenNew, openLogin, openMenu, openNew, closeModal };
 };

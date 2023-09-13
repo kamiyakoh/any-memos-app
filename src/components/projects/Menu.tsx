@@ -12,6 +12,7 @@ export const Menu: FC = () => {
     handleBgFilterChange,
     handleAddMonth,
     handleAddHours,
+    onClickErrorToast,
   } = useMenu();
 
   return (
@@ -25,7 +26,12 @@ export const Menu: FC = () => {
           </label>
         ))}
       </div>
-      <div className={`w-full pb-4 mt-6 mb-8 ${isFixedBgImg ? 'bg-black bg-opacity-60' : ''}`}>
+      <div
+        className={`w-full pb-4 mt-6 mb-8 ${isFixedBgImg ? 'bg-black bg-opacity-60' : ''}`}
+        onClick={() => {
+          onClickErrorToast(isFixedBgImg);
+        }}
+      >
         <p>月調整</p>
         <label>
           +
@@ -56,7 +62,11 @@ export const Menu: FC = () => {
 
       <div className={`w-full pb-4 mt-6 ${isFixedBgFilter ? 'bg-black bg-opacity-60' : ''}`}>
         <p>時間調整</p>
-        <label>
+        <label
+          onClick={() => {
+            onClickErrorToast(isFixedBgFilter);
+          }}
+        >
           {menuOption.addHours >= 0 && '+'}
           <input
             type="number"

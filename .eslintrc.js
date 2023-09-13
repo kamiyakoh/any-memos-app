@@ -35,6 +35,7 @@ module.exports = {
     '@typescript-eslint/consistent-type-imports': 'off',
     // 不適切な依存配列の検知
     'react-hooks/exhaustive-deps': 'warn',
+    '@typescript-eslint/no-misused-promises': 'off',
   },
   ignorePatterns: ['build/', 'src--jsx/', 'public/', '**/node_modules/', '*.config.js', '.*lintrc.js', '/*.*'],
 };

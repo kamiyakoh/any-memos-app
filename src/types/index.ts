@@ -18,6 +18,11 @@ export type MixBlendMode =
 
 export type BgImg = 'unfixed' | 'spring' | 'summer' | 'autumn' | 'winter';
 export type BgFilter = 'unfixed' | 'midnight' | 'morning' | 'afternoon' | 'evening';
+
+export interface AccessToken {
+  accessToken: string;
+  accessTokenExp: string;
+}
 export interface Memo {
   id: string;
   title: string;
@@ -25,6 +30,14 @@ export interface Memo {
   description: string;
   date: string;
   markDiv: number;
+}
+
+export interface FormValues {
+  title: string;
+  category: string;
+  description: string;
+  date: string;
+  isChecked: boolean;
 }
 
 export interface MenuOption {

@@ -1,6 +1,7 @@
 import type { BgImg, BgFilter, MenuOption } from '../types';
 import { useState, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
+import toast from 'react-hot-toast';
 import { menuOptionState } from '../states/menuOptionState';
 
 interface BgImgOptions {
@@ -21,6 +22,7 @@ interface UseMenu {
   handleBgFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleAddMonth: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleAddHours: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onClickErrorToast: (isFixed: boolean) => void;
 }
 
 export const useMenu = (): UseMenu => {
@@ -95,6 +97,9 @@ export const useMenu = (): UseMenu => {
       setMenuOption({ ...menuOption, addHours: newValue });
     }
   };
+  const onClickErrorToast = (isFixed: boolean): void => {
+    if (isFixed) toast.error(`変更するには"固定しない"を選択してください`);
+  };
 
   return {
     menuOption,
@@ -106,5 +111,6 @@ export const useMenu = (): UseMenu => {
     handleBgFilterChange,
     handleAddMonth,
     handleAddHours,
+    onClickErrorToast,
   };
 };

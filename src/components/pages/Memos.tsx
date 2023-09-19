@@ -1,117 +1,36 @@
-/* import type { MemoBody } from '../../mocks/handlers';
-import { FC, useState, useEffect } from 'react';
-import { Modal } from '../projects/Modal';
-import { EditMemo } from '../projects/EditMemo';
-
-interface MemosData {
-  memos: MemoBody[];
-}
-interface ErrorMessage {
-  errorMessage: string;
-}
+import { FC } from 'react';
+import { useMemos } from '../../hooks/useMemos';
 
 export const Memos: FC = () => {
-  const [memos, setMeoms] = useState<null | MemoBody[]>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editId, setEditId] = useState('');
-  const [inputErrorMessage, setInputErrorMessage] = useState('');
-  useEffect(() => {
-    fetch('/api/memos', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(async (response) => {
-        if (response.ok) {
-          const memosData = (await response.json()) as MemosData;
-          setMeoms(memosData.memos);
-        } else {
-          console.log(response.json());
-        }
-      })
-      .catch((error) => {
-        console.error('エラーが発生しました:', error);
-      });
-  }, []);
-  const mark = (markDiv: number): string => {
-    if (markDiv === 1) {
-      return '★';
-    } else {
-      return '-';
-    }
-  };
-  const delMemo = (id: string): void => {
-    fetch('/api/memo/:id', {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ id }),
-    })
-      .then(async (response) => {
-        if (response.ok) {
-          setInputErrorMessage('');
-          return (await response.json()) as MemoBody;
-        } else {
-          const responseError = (await response.json()) as ErrorMessage;
-          setInputErrorMessage(responseError.errorMessage);
-          return responseError;
-        }
-      })
-      .then((responseData) => {
-        console.log(responseData);
-      })
-      .catch((error) => {
-        console.error('エラーが発生しました:', error);
-      });
-  };
-
-  const openModal = (id: string): void => {
-    setEditId(id);
-    setIsModalOpen(true);
-  };
-  const closeModal = (): void => {
-    setIsModalOpen(false);
-  };
+  const { data, delMemo } = useMemos();
+  console.log(data);
 
   return (
-    <div>
-      {memos !== null ? (
-        memos.map((m) => (
-          <div key={m.id}>
-            <p>id: {m.id}</p>
-            <p>title: {m.title}</p>
-            <div>{mark(m.markDiv)}</div>
-            <button
-              className="px-4 py-2 bg-blue-500 rounded hover:bg-blue-600"
-              onClick={() => {
-                openModal(m.id);
-              }}
-            >
-              Edit
-            </button>
+    <div className="flex justify-center w-full px-[5%]">
+      <div className="flex flex-wrap w-full max-w-[1920px] gap-4">
+        {data?.map((memo) => (
+          <div
+            key={memo.id}
+            className="bg-black bg-opacity-50 rounded p-4 w-full md:w-[calc(50%_-_0.5rem)]"
+            style={{ backdropFilter: 'blur(4px)' }}
+          >
+            <h2>ID: {memo.id}</h2>
+            <h2>タイトル: {memo.title}</h2>
+            <p>カテゴリー: {memo.category}</p>
+            <p>詳細説明: {memo.description}</p>
+            <p>期限日時: {memo.date}</p>
+            {memo.markDiv === 1 && <p>★</p>}
             <button
               className="px-4 py-2 bg-red-500 rounded hover:bg-red-600"
               onClick={() => {
-                delMemo(m.id);
+                delMemo(memo.id);
               }}
             >
-              Delete
+              削除
             </button>
-            <p>{inputErrorMessage}</p>
-            <hr />
           </div>
-        ))
-      ) : (
-        <div>
-          <p>Loading ...</p>
-        </div>
-      )}
-      <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <EditMemo memos={memos ?? []} id={editId} closeModal={closeModal} />
-      </Modal>
+        ))}
+      </div>
     </div>
   );
 };
-*/

@@ -1,7 +1,9 @@
 import type { UseFormRegister, UseFormHandleSubmit } from 'react-hook-form';
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
+import { useRecoilState } from 'recoil';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
+import { authState } from '../states/authState';
 import { login } from '../mocks/auth';
 
 interface InputLogin {
@@ -9,7 +11,6 @@ interface InputLogin {
   password: string;
 }
 interface UseLogin {
-  isAuth: boolean;
   register: UseFormRegister<InputLogin>;
   handleSubmit: UseFormHandleSubmit<InputLogin>;
   fetchIsAuth: () => void;
@@ -17,7 +18,7 @@ interface UseLogin {
 }
 
 export const useLogin = (): UseLogin => {
-  const [isAuth, setIsAuth] = useState<boolean>(false);
+  const [auth, setAuth] = useRecoilState(authState);
 
   const { register, handleSubmit } = useForm<InputLogin>({
     defaultValues: {
@@ -34,16 +35,16 @@ export const useLogin = (): UseLogin => {
     })
       .then((response) => {
         if (response.ok) {
-          if (!isAuth) setIsAuth(true);
+          if (!auth.isAuth) setAuth({ isAuth: true });
         } else {
-          if (isAuth) setIsAuth(false);
+          if (auth.isAuth) setAuth({ isAuth: false });
         }
       })
       .catch(() => {
-        if (isAuth) setIsAuth(false);
+        if (auth.isAuth) setAuth({ isAuth: false });
         toast.error('ログイン認証に失敗しました');
       });
-  }, [isAuth]);
+  }, [auth, setAuth]);
 
   const handleLogin = useCallback((data: InputLogin): void => {
     const email = data.email;
@@ -59,5 +60,5 @@ export const useLogin = (): UseLogin => {
       });
   }, []);
 
-  return { isAuth, register, handleSubmit, fetchIsAuth, handleLogin };
+  return { register, handleSubmit, fetchIsAuth, handleLogin };
 };

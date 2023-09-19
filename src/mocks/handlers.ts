@@ -7,7 +7,7 @@ interface LoginBody {
   password: string;
 }
 
-let memos = (localStorage.getItem('memos') ?? []) as Memo[];
+let memos = JSON.parse(localStorage.getItem('memos') ?? '[]') as Memo[];
 
 export const getAuth = (): boolean => {
   const isToken = localStorage.getItem('accessToken');
@@ -41,7 +41,7 @@ const errorMessage = (title: string, date: string, markDiv: number): string => {
   if (title === '') message = ['タイトルは必須です'];
   if (!isValidDate(date)) message = [...message, '日付の形式が不正です'];
   if (Number.isNaN(markDiv)) message = [...message, 'マーク区分は数値で入力してください'];
-  const errorMessage = message.join(',\n');
+  const errorMessage = message.join('\n');
   return errorMessage;
 };
 
@@ -60,7 +60,7 @@ export const handlers = [
     if (email !== 'hoge@example.com' || password !== 'exam') {
       return await res(ctx.status(401), ctx.json({ message: 'unauthorized' }));
     }
-    const expDate = dayjs().add(5, 'minute');
+    const expDate = dayjs().add(24, 'hour');
     return await res(
       ctx.json({
         accessToken: 'mock-jwt-token',

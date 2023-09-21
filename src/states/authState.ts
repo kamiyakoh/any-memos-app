@@ -1,7 +1,7 @@
 import { atom } from 'recoil';
 import { recoilKey } from './recoilKey';
 
-interface Auth {
+export interface Auth {
   isAuth: boolean;
 }
 

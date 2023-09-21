@@ -2,10 +2,10 @@ import type { Memo } from '../types';
 import { useRecoilState } from 'recoil';
 import { useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 import toast from 'react-hot-toast';
 // import { authState } from '../states/authState';
 import { memosState } from '../states/memosState';
+import { axiosInstance } from '../utils/axiosInstance';
 
 interface UseMemos {
   memos: Memo[];
@@ -62,7 +62,7 @@ export const useMemos = (): UseMemos => {
       });
   }, [auth, memos, setAuth, setNewMemos]); */
   const fetchMemos = async (): Promise<Memo[]> => {
-    const result = await axios.get<{ memos: Memo[] }>('/api/memos');
+    const result = await axiosInstance.get<{ memos: Memo[] }>('/memos');
     return result.data.memos;
   };
 

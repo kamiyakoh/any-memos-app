@@ -1,9 +1,12 @@
+import type { SetterOrUpdater } from 'recoil';
 import type { UseFormRegister, UseFormHandleSubmit } from 'react-hook-form';
+import type { Auth } from '../states/authState';
 import { useCallback } from 'react';
 import { useRecoilState } from 'recoil';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { authState } from '../states/authState';
+import { axiosInstance } from '../utils/axiosInstance';
 import { login } from '../mocks/auth';
 
 interface InputLogin {
@@ -11,6 +14,8 @@ interface InputLogin {
   password: string;
 }
 interface UseLogin {
+  auth: Auth;
+  setAuth: SetterOrUpdater<Auth>;
   register: UseFormRegister<InputLogin>;
   handleSubmit: UseFormHandleSubmit<InputLogin>;
   fetchIsAuth: () => void;
@@ -26,25 +31,16 @@ export const useLogin = (): UseLogin => {
       password: '',
     },
   });
-  const fetchIsAuth = useCallback((): void => {
-    fetch('/api/memos', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => {
-        if (response.ok) {
-          if (!auth.isAuth) setAuth({ isAuth: true });
-        } else {
-          if (auth.isAuth) setAuth({ isAuth: false });
-        }
+  const fetchIsAuth = (): void => {
+    axiosInstance
+      .get('/memos')
+      .then(() => {
+        setAuth({ isAuth: true });
       })
       .catch(() => {
-        if (auth.isAuth) setAuth({ isAuth: false });
-        toast.error('ログイン認証に失敗しました');
+        console.log('ログイン認証に失敗しました');
       });
-  }, [auth, setAuth]);
+  };
 
   const handleLogin = useCallback((data: InputLogin): void => {
     const email = data.email;
@@ -60,5 +56,5 @@ export const useLogin = (): UseLogin => {
       });
   }, []);
 
-  return { register, handleSubmit, fetchIsAuth, handleLogin };
+  return { auth, setAuth, register, handleSubmit, fetchIsAuth, handleLogin };
 };

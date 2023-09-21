@@ -14,7 +14,6 @@ import { Login } from './components/projects/Login';
 import { Menu } from './components/projects/Menu';
 import { New } from './components/projects/New';
 import { Memos } from './components/pages/Memos';
-
 import menuIcon from './assets/img/menuIcon.png';
 
 // モックサービスワーカーを起動
@@ -28,7 +27,7 @@ export const App: FC = () => {
 
   useEffect(() => {
     fetchIsAuth();
-  }, [fetchIsAuth]);
+  }, []);
 
   return (
     <div>

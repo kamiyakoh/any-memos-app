@@ -1,4 +1,4 @@
-import type { MemoBody } from '../../mocks/handlers';
+/* import type { MemoBody } from '../../mocks/handlers';
 import { FC, useState } from 'react';
 
 interface Props {
@@ -69,3 +69,4 @@ export const EditMemo: FC<Props> = ({ memos, id, closeModal }) => {
     </div>
   );
 };
+*/

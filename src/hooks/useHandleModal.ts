@@ -7,6 +7,7 @@ interface UseHandleModal {
   openLogin: () => void;
   openMenu: () => void;
   openNew: () => void;
+  closeLoginModal: () => void;
   closeModal: () => void;
 }
 
@@ -24,11 +25,13 @@ export const useHandleModal = (): UseHandleModal => {
   const openNew = (): void => {
     setIsOpenNew(true);
   };
-  const closeModal = (): void => {
+  const closeLoginModal = (): void => {
     setIsOpenLogin(false);
+  };
+  const closeModal = (): void => {
     setIsOpenMenu(false);
     setIsOpenNew(false);
   };
 
-  return { isOpenLogin, isOpenMenu, isOpenNew, openLogin, openMenu, openNew, closeModal };
+  return { isOpenLogin, isOpenMenu, isOpenNew, openLogin, openMenu, openNew, closeLoginModal, closeModal };
 };

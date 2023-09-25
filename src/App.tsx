@@ -1,5 +1,5 @@
-import { FC, useEffect, Suspense } from 'react';
-import { useRecoilState } from 'recoil';
+import { FC, Suspense, useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
 import { ErrorBoundary } from 'react-error-boundary';
 // import { BrowserRouter } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
@@ -9,7 +9,7 @@ import { useHandleModal } from './hooks/useHandleModal';
 import { useLogin } from './hooks/useLogin';
 import { worker } from './serviceWorker';
 import { authState } from './states/authState';
-import { Modal } from './components/projects/Modal';
+import { Modal } from './components/uiParts/Modal';
 import { Login } from './components/projects/Login';
 import { Menu } from './components/projects/Menu';
 import { New } from './components/projects/New';
@@ -20,27 +20,34 @@ import menuIcon from './assets/img/menuIcon.png';
 worker.start(); // eslint-disable-line @typescript-eslint/no-floating-promises
 
 export const App: FC = () => {
-  const [auth] = useRecoilState(authState);
+  const isAuth = useRecoilValue(authState).isAuth;
   const { bgImg, bgFilter } = useApp();
   const { isOpenMenu, isOpenNew, openMenu, openNew, closeModal } = useHandleModal();
-  const { fetchIsAuth } = useLogin();
+  const { isOpenLogin, fetchIsAuth } = useLogin();
 
   useEffect(() => {
     fetchIsAuth();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div>
-      {!isOpenMenu && (
+      {isAuth && !isOpenMenu && (
         <button
-          className="fixed top-8 right-8 z-50 rounded bg-black bg-opacity-50 p-2"
+          className="fixed top-4 right-4 z-50 rounded bg-black bg-opacity-50 p-2 min-[1936px]:right-[calc((100%_-_1920px)_/_2)]"
           style={{ backdropFilter: 'blur(4px)' }}
           onClick={openMenu}
         >
           <img src={menuIcon} alt="menuIcon" />
         </button>
       )}
-
+      {isAuth && !isOpenNew && (
+        <button
+          className="fixed top-4 left-4 z-50 text-4xl px-4 h-16 bg-blue-500 text-white rounded hover:bg-blue-600 min-[1936px]:left-[calc((100%_-_1920px)_/_2)]"
+          onClick={openNew}
+        >
+          作成
+        </button>
+      )}
       <div className="h-full min-h-screen relative bg-center bg-cover" style={{ backgroundImage: `url(${bgImg})` }}>
         <div
           className="absolute top-0 left-0 z-0 w-full h-full bg-gradient-to-b"
@@ -49,12 +56,10 @@ export const App: FC = () => {
             mixBlendMode: bgFilter.mixBrendMode,
           }}
         />
-        {auth.isAuth && (
-          <div className="absolute top-0 left-0 z-50 text-white w-full overflow-y-auto">
-            <div className="max-h-screen">
-              <button className="px-4 py-2 m-4 bg-blue-500 text-white rounded hover:bg-blue-600" onClick={openNew}>
-                作成
-              </button>
+
+        {isAuth && (
+          <div className="absolute top-0 left-0 z-40 text-white w-full overflow-y-auto">
+            <div className="max-h-screen pt-[5.5rem]">
               <ErrorBoundary
                 fallback={
                   <div className="flex justify-center">
@@ -80,11 +85,17 @@ export const App: FC = () => {
           </div>
         )}
       </div>
-      <Modal isOpen={!auth.isAuth || isOpenMenu || isOpenNew} onClose={closeModal}>
-        {!auth.isAuth && <Login />}
+      <Modal isOpen={isOpenMenu || isOpenNew} isLogin={false} onClose={closeModal}>
         {isOpenMenu && <Menu />}
         {isOpenNew && <New />}
       </Modal>
+      <Suspense fallback={<div />}>
+        {isOpenLogin !== undefined && (
+          <Modal isOpen={isOpenLogin} isLogin={true}>
+            <Login />
+          </Modal>
+        )}
+      </Suspense>
       <Toaster
         toastOptions={{
           style: { background: 'rgba(0, 0, 0, 0.5)', color: '#fff', padding: '1rem', backdropFilter: 'blur(4px)' },

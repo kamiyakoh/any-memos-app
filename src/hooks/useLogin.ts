@@ -1,13 +1,16 @@
 import type { SetterOrUpdater } from 'recoil';
 import type { UseFormRegister, UseFormHandleSubmit } from 'react-hook-form';
 import type { Auth } from '../states/authState';
+import type { Memo } from '../types';
 import { useCallback } from 'react';
 import { useRecoilState } from 'recoil';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { authState } from '../states/authState';
+// import { useHandleModal } from './useHandleModal';
 import { axiosInstance } from '../utils/axiosInstance';
 import { login } from '../mocks/auth';
+import { useQuery } from '@tanstack/react-query';
 
 interface InputLogin {
   email: string;
@@ -15,6 +18,7 @@ interface InputLogin {
 }
 interface UseLogin {
   auth: Auth;
+  isOpenLogin?: boolean;
   setAuth: SetterOrUpdater<Auth>;
   register: UseFormRegister<InputLogin>;
   handleSubmit: UseFormHandleSubmit<InputLogin>;
@@ -31,14 +35,25 @@ export const useLogin = (): UseLogin => {
       password: '',
     },
   });
+  const fetchIsOpenLogin = async (): Promise<boolean> => {
+    let isOpenLogin = false;
+    const res = await axiosInstance.get<{ memos: Memo[] }>('/memos');
+    console.log(res);
+    if (res.status === 200) isOpenLogin = false;
+    if (res.status === 401) isOpenLogin = true;
+    return isOpenLogin;
+  };
+  const isOpenLogin = useQuery<boolean>(['isOpenLogin'], fetchIsOpenLogin).data;
+
   const fetchIsAuth = (): void => {
     axiosInstance
       .get('/memos')
-      .then(() => {
-        setAuth({ isAuth: true });
+      .then((response) => {
+        if (response.status === 200) setAuth({ isAuth: true });
+        if (response.status === 401) setAuth({ isAuth: false });
       })
-      .catch(() => {
-        console.log('ログイン認証に失敗しました');
+      .catch((error: string) => {
+        console.log(`エラーが発生しました: ${error}`);
       });
   };
 
@@ -56,5 +71,5 @@ export const useLogin = (): UseLogin => {
       });
   }, []);
 
-  return { auth, setAuth, register, handleSubmit, fetchIsAuth, handleLogin };
+  return { auth, isOpenLogin, setAuth, register, handleSubmit, fetchIsAuth, handleLogin };
 };

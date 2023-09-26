@@ -12,7 +12,7 @@ interface UseMemos {
   data?: Memo[];
   setNewMemos: (newMemos: Memo[]) => void;
   delMemo: (id: string) => void;
-  // fetchMemos: () => void;
+  textFormatBr: (text: string) => string;
   fetchMemos: () => Promise<Memo[]>;
 }
 
@@ -39,28 +39,10 @@ export const useMemos = (): UseMemos => {
     },
     [memos, setNewMemos],
   );
-  /* const fetchMemos = useCallback((): void => {
-    fetch('/api/memos', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(async (response) => {
-        if (response.ok) {
-          if (!auth.isAuth) setAuth({ isAuth: true });
-          const memosData = (await response.json()) as Pick<UseMemos, 'memos'>;
-          setNewMemos(memosData.memos);
-        } else {
-          toast.error((await response.json()) as string);
-          if (auth.isAuth) setAuth({ isAuth: false });
-        }
-      })
-      .catch((error: string) => {
-        toast.error(`エラーが発生しました: ${error}`);
-        if (auth.isAuth) setAuth({ isAuth: false });
-      });
-  }, [auth, memos, setAuth, setNewMemos]); */
+  const textFormatBr = (text: string): string => {
+    if (text === '' || text === null) return '';
+    return text.replace(/\n/g, '<br>');
+  };
   const fetchMemos = async (): Promise<Memo[]> => {
     const result = await axiosInstance.get<{ memos: Memo[] }>('/memos');
     return result.data.memos;
@@ -68,5 +50,5 @@ export const useMemos = (): UseMemos => {
 
   const { data } = useQuery<Memo[]>(['memos'], fetchMemos);
 
-  return { memos, data, setNewMemos, delMemo, fetchMemos };
+  return { memos, data, setNewMemos, delMemo, textFormatBr, fetchMemos };
 };

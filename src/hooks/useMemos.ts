@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 // import { authState } from '../states/authState';
 import { memosState } from '../states/memosState';
 import { axiosInstance } from '../utils/axiosInstance';
+import { queryKey } from '../utils/queryKey';
 
 interface UseMemos {
   memos: Memo[];
@@ -48,7 +49,7 @@ export const useMemos = (): UseMemos => {
     return result.data.memos;
   };
 
-  const { data } = useQuery<Memo[]>(['memos'], fetchMemos);
+  const { data } = useQuery<Memo[]>([queryKey.memos], fetchMemos);
 
   return { memos, data, setNewMemos, delMemo, textFormatBr, fetchMemos };
 };

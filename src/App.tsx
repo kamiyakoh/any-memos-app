@@ -1,12 +1,11 @@
-import { FC, Suspense, useEffect } from 'react';
-import { useRecoilValue } from 'recoil';
+import { FC, Suspense, useEffect, useState } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { ErrorBoundary } from 'react-error-boundary';
 // import { BrowserRouter } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 // import { Router } from './routers/Router';
 import { useApp } from './hooks/useApp';
 import { useHandleModal } from './hooks/useHandleModal';
-import { useLogin } from './hooks/useLogin';
 import { worker } from './serviceWorker';
 import { authState } from './states/authState';
 import { Modal } from './components/uiParts/Modal';
@@ -16,18 +15,34 @@ import { New } from './components/projects/New';
 import { Memos } from './components/pages/Memos';
 import menuIcon from './assets/img/menuIcon.png';
 
-// モックサービスワーカーを起動
 worker.start(); // eslint-disable-line @typescript-eslint/no-floating-promises
 
 export const App: FC = () => {
   const isAuth = useRecoilValue(authState).isAuth;
   const { bgImg, bgFilter } = useApp();
   const { isOpenMenu, isOpenNew, openMenu, openNew, closeModal } = useHandleModal();
-  const { isOpenLogin, fetchIsAuth } = useLogin();
+
+  const [isLoading, setIsLoading] = useState(true);
+  const setIsAuth = useSetRecoilState(authState);
 
   useEffect(() => {
-    fetchIsAuth();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    fetch('/api/memos', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => {
+        if (res.status === 200) setIsAuth({ isAuth: true });
+        if (res.status === 401) setIsAuth({ isAuth: false });
+      })
+      .catch(() => {
+        setIsAuth({ isAuth: false });
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [setIsAuth]);
 
   return (
     <div>
@@ -56,7 +71,6 @@ export const App: FC = () => {
             mixBlendMode: bgFilter.mixBrendMode,
           }}
         />
-
         {isAuth && (
           <div className="absolute top-0 left-0 z-40 text-white w-full overflow-y-auto">
             <div className="max-h-screen pt-[5.5rem]">
@@ -89,13 +103,11 @@ export const App: FC = () => {
         {isOpenMenu && <Menu />}
         {isOpenNew && <New />}
       </Modal>
-      <Suspense fallback={<div />}>
-        {isOpenLogin !== undefined && (
-          <Modal isOpen={isOpenLogin} isLogin={true}>
-            <Login />
-          </Modal>
-        )}
-      </Suspense>
+      {!isLoading && (
+        <Modal isOpen={!isAuth} isLogin={true}>
+          {!isAuth && <Login />}
+        </Modal>
+      )}
       <Toaster
         toastOptions={{
           style: { background: 'rgba(0, 0, 0, 0.5)', color: '#fff', padding: '1rem', backdropFilter: 'blur(4px)' },

@@ -1,12 +1,11 @@
 import type { SetterOrUpdater } from 'recoil';
 import type { UseFormRegister, UseFormHandleSubmit } from 'react-hook-form';
 import type { Auth } from '../states/authState';
-import { useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { useRecoilState } from 'recoil';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { authState } from '../states/authState';
-import { axiosInstance } from '../utils/axiosInstance';
 import { login } from '../mocks/auth';
 
 interface InputLogin {
@@ -15,16 +14,17 @@ interface InputLogin {
 }
 interface UseLogin {
   auth: Auth;
+  isLoading: boolean;
   setAuth: SetterOrUpdater<Auth>;
   register: UseFormRegister<InputLogin>;
   handleSubmit: UseFormHandleSubmit<InputLogin>;
-  fetchIsAuth: () => void;
+  fetchAuth: () => void;
   handleLogin: (data: InputLogin) => void;
 }
 
 export const useLogin = (): UseLogin => {
+  const [isLoading, setIsLoading] = useState(true);
   const [auth, setAuth] = useRecoilState(authState);
-
   const { register, handleSubmit } = useForm<InputLogin>({
     defaultValues: {
       email: '',
@@ -32,17 +32,23 @@ export const useLogin = (): UseLogin => {
     },
   });
 
-  const fetchIsAuth = useCallback((): void => {
-    axiosInstance
-      .get('/memos')
-      .then((response) => {
-        if (response.status === 200) setAuth({ isAuth: true });
-        if (response.status === 401) {
-          setAuth({ isAuth: false });
-        }
+  // useEffectとaxiosとMSWの組合せで発生するFireFoxのXHR_404_NotFonund問題に対処するためaxiosではなくfetchを使用
+  const fetchAuth = useCallback((): void => {
+    fetch('/api/memos', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => {
+        if (res.status === 200) setAuth({ isAuth: true });
+        if (res.status === 401) setAuth({ isAuth: false });
       })
-      .catch((error: string) => {
-        console.log(`エラーが発生しました: ${error}`);
+      .catch(() => {
+        setAuth({ isAuth: false });
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, [setAuth]);
 
@@ -63,5 +69,5 @@ export const useLogin = (): UseLogin => {
     [setAuth],
   );
 
-  return { auth, setAuth, register, handleSubmit, fetchIsAuth, handleLogin };
+  return { auth, isLoading, setAuth, register, handleSubmit, fetchAuth, handleLogin };
 };

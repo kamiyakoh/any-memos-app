@@ -1,5 +1,5 @@
-import { FC, Suspense, useEffect, useState } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { FC, Suspense, useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
 import { ErrorBoundary } from 'react-error-boundary';
 // import { BrowserRouter } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
@@ -14,6 +14,7 @@ import { Menu } from './components/projects/Menu';
 import { New } from './components/projects/New';
 import { Memos } from './components/pages/Memos';
 import menuIcon from './assets/img/menuIcon.png';
+import { useLogin } from './hooks/useLogin';
 
 worker.start(); // eslint-disable-line @typescript-eslint/no-floating-promises
 
@@ -21,28 +22,11 @@ export const App: FC = () => {
   const isAuth = useRecoilValue(authState).isAuth;
   const { bgImg, bgFilter } = useApp();
   const { isOpenMenu, isOpenNew, openMenu, openNew, closeModal } = useHandleModal();
-
-  const [isLoading, setIsLoading] = useState(true);
-  const setIsAuth = useSetRecoilState(authState);
+  const { isLoading, fetchAuth } = useLogin();
 
   useEffect(() => {
-    fetch('/api/memos', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((res) => {
-        if (res.status === 200) setIsAuth({ isAuth: true });
-        if (res.status === 401) setIsAuth({ isAuth: false });
-      })
-      .catch(() => {
-        setIsAuth({ isAuth: false });
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, [setIsAuth]);
+    fetchAuth();
+  }, [fetchAuth]);
 
   return (
     <div>

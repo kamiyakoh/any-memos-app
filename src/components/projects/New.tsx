@@ -2,11 +2,10 @@ import { FC } from 'react';
 import { useNew } from '../../hooks/useNew';
 
 export const New: FC = () => {
-  const { inputErrorMessage, register, handleSubmit, postMemo } = useNew();
+  const { register, handleSubmit, postMemo } = useNew();
 
   return (
     <div>
-      {inputErrorMessage !== '' && <p>{inputErrorMessage}</p>}
       <form className="w-[80vw] max-w-screen-2xl" onSubmit={handleSubmit(postMemo)}>
         <label htmlFor="title">
           タイトル

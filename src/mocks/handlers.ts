@@ -1,4 +1,4 @@
-import type { Memo } from '../types';
+import type { MemoData } from '../types';
 import { rest } from 'msw';
 import dayjs from 'dayjs';
 
@@ -7,7 +7,7 @@ interface LoginBody {
   password: string;
 }
 
-let memos = JSON.parse(localStorage.getItem('memos') ?? '[]') as Memo[];
+let memos = JSON.parse(localStorage.getItem('memos') ?? '[]') as MemoData[];
 
 export const getAuth = (): boolean => {
   const isToken = localStorage.getItem('accessToken');
@@ -24,11 +24,11 @@ const isValidDate = (date: string): boolean => {
   const dateObj = dayjs(date, { format: dateFormat });
   return dateObj.isValid();
 };
-const setNewMemos = (newMemos: Memo[]): void => {
+const setNewMemos = (newMemos: MemoData[]): void => {
   localStorage.setItem('memos', JSON.stringify(newMemos));
   memos = newMemos;
 };
-const delMemo = (id: string): void => {
+const delMemo = (id: string | readonly string[]): void => {
   const filterMemos = memos.filter((memo) => memo.id !== id);
   const fixedMemos = filterMemos.map((memo, index) => ({
     ...memo,
@@ -95,7 +95,7 @@ export const handlers = [
       );
     }
     // 認証が正常の場合
-    const requestBody: Memo = await req.json();
+    const requestBody: MemoData = await req.json();
     const { title, category, description, date, markDiv } = requestBody;
     // inputも正常の場合
     if (title !== '' && isValidDate(date) && !Number.isNaN(markDiv)) {
@@ -128,7 +128,7 @@ export const handlers = [
       );
     }
     // 認証が正常の場合
-    const requestBody: Memo = await req.json();
+    const requestBody: MemoData = await req.json();
     const { id, title, category, description, date, markDiv } = requestBody;
     // inputも正常の場合
     if (title !== '' && isValidDate(date) && !Number.isNaN(markDiv)) {
@@ -165,13 +165,14 @@ export const handlers = [
         }),
       );
     }
-    // 認証が正常の場合
-    const requestBody: Memo = await req.json();
-    const { id, title, category, description, date, markDiv } = requestBody;
-    // inputも正常の場合
-    const thisMemo = memos.find((memo) => memo.id === id);
-    if (thisMemo !== null) {
-      delMemo(id);
+
+    // 認証とinputが正常の場合
+    const thisId = req.params.id;
+    const thisMemo = memos.find((memo) => memo.id === thisId);
+
+    if (thisMemo !== undefined) {
+      const { id, title, category, description, date, markDiv } = thisMemo;
+      delMemo(thisId);
       return await res(
         ctx.status(200),
         ctx.json({

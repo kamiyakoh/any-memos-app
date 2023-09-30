@@ -1,17 +1,14 @@
 import type { FormValues } from '../types';
 import type { UseFormRegister, UseFormHandleSubmit } from 'react-hook-form';
-import { useState } from 'react';
+import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
+import { axiosInstance } from '../utils/axiosInstance';
 import toast from 'react-hot-toast';
 
 interface UseNew {
-  inputErrorMessage: string;
   register: UseFormRegister<FormValues>;
   handleSubmit: UseFormHandleSubmit<FormValues>;
   postMemo: (data: FormValues) => Promise<void>;
-}
-interface ErrorMessage {
-  errorMessage: string;
 }
 
 export const useNew = (): UseNew => {
@@ -24,37 +21,34 @@ export const useNew = (): UseNew => {
       isChecked: false,
     },
   });
-  const [inputErrorMessage, setInputErrorMessage] = useState<string>('');
-  const postMemo = async (data: FormValues): Promise<void> => {
-    const title = data.title;
-    const category = data.category;
-    const description = data.description;
-    const date = data.date;
-    let markDiv = 0;
-    if (data.isChecked) markDiv = 1;
+  const postMemo = useCallback(
+    async (data: FormValues): Promise<void> => {
+      const { title, category, description, date, isChecked } = data;
+      let markDiv = 0;
+      if (isChecked) markDiv = 1;
 
-    try {
-      const response = await fetch('/api/memo', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ title, category, description, date, markDiv }),
-      });
+      try {
+        const res = await axiosInstance.post('/memo', {
+          title,
+          category,
+          description,
+          date,
+          markDiv,
+        });
 
-      if (response.ok) {
-        setInputErrorMessage('');
-        reset();
-        toast.success('新しいメモを作成しました');
-      } else {
-        const responseError = (await response.json()) as ErrorMessage;
-        setInputErrorMessage(responseError.errorMessage);
-        toast.error(responseError.errorMessage);
+        if (res.status === 200) {
+          reset();
+          toast.success('新しいメモを作成しました');
+        } else {
+          const responseError = res.data as { errorMessage: string };
+          toast.error(responseError.errorMessage);
+        }
+      } catch (error) {
+        toast.error('エラーが発生しました');
       }
-    } catch {
-      toast.error('エラーが発生しました');
-    }
-  };
+    },
+    [reset],
+  );
 
-  return { inputErrorMessage, register, handleSubmit, postMemo };
+  return { register, handleSubmit, postMemo };
 };

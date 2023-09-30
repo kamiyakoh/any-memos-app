@@ -23,7 +23,7 @@ export interface AccessToken {
   accessToken: string;
   accessTokenExp: string;
 }
-export interface Memo {
+export interface MemoData {
   id: string;
   title: string;
   category: string;

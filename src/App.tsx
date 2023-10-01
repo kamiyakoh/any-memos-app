@@ -1,5 +1,4 @@
 import { FC, Suspense, useEffect } from 'react';
-import { useRecoilValue } from 'recoil';
 import { ErrorBoundary } from 'react-error-boundary';
 // import { BrowserRouter } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
@@ -19,7 +18,7 @@ worker.start(); // eslint-disable-line @typescript-eslint/no-floating-promises
 
 export const App: FC = () => {
   const { bgImg, bgFilter } = useApp();
-  const { isOpenMenu, isOpenNew, openMenu, openNew, closeModal } = useHandleModal();
+  const { isOpenMenu, isOpenNew, openMenu, openNew, closeMenuModal, closeNewModal } = useHandleModal();
   const { isAuth, isLoading, fetchIsAuth } = useLogin();
 
   useEffect(() => {
@@ -81,9 +80,11 @@ export const App: FC = () => {
           </div>
         )}
       </div>
-      <Modal isOpen={isOpenMenu || isOpenNew} isLogin={false} onClose={closeModal}>
-        {isOpenMenu && <Menu />}
+      <Modal isOpen={isOpenNew} isLogin={false} onClose={closeNewModal}>
         {isOpenNew && <New />}
+      </Modal>
+      <Modal isOpen={isOpenMenu} isLogin={false} onClose={closeMenuModal}>
+        {isOpenMenu && <Menu />}
       </Modal>
       {!isLoading && (
         <Modal isOpen={!isAuth} isLogin={true}>

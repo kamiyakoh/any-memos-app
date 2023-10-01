@@ -11,8 +11,6 @@ export const axiosInstance = axios.create({
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('accessTokenExp');
     return error.response;
   },
 );

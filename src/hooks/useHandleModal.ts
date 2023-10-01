@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { isOpenNewState } from '../states/isOpenNew';
 
 interface UseHandleModal {
   isOpenLogin: boolean;
@@ -8,13 +10,14 @@ interface UseHandleModal {
   openMenu: () => void;
   openNew: () => void;
   closeLoginModal: () => void;
-  closeModal: () => void;
+  closeMenuModal: () => void;
+  closeNewModal: () => void;
 }
 
 export const useHandleModal = (): UseHandleModal => {
   const [isOpenLogin, setIsOpenLogin] = useState<boolean>(false);
   const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
-  const [isOpenNew, setIsOpenNew] = useState<boolean>(false);
+  const [isOpenNew, setIsOpenNew] = useRecoilState<boolean>(isOpenNewState);
 
   const openLogin = (): void => {
     setIsOpenLogin(true);
@@ -28,10 +31,23 @@ export const useHandleModal = (): UseHandleModal => {
   const closeLoginModal = (): void => {
     setIsOpenLogin(false);
   };
-  const closeModal = (): void => {
+  const closeMenuModal = (): void => {
     setIsOpenMenu(false);
+  };
+
+  const closeNewModal = (): void => {
     setIsOpenNew(false);
   };
 
-  return { isOpenLogin, isOpenMenu, isOpenNew, openLogin, openMenu, openNew, closeLoginModal, closeModal };
+  return {
+    isOpenLogin,
+    isOpenMenu,
+    isOpenNew,
+    openLogin,
+    openMenu,
+    openNew,
+    closeLoginModal,
+    closeMenuModal,
+    closeNewModal,
+  };
 };

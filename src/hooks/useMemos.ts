@@ -13,7 +13,7 @@ interface UseMemos {
 export const useMemos = (): UseMemos => {
   const fetchMemos = async (): Promise<MemoData[]> => {
     const result = await axiosInstance.get<{ memos: MemoData[] }>('/memos');
-    return result.data.memos;
+    return result.data.memos ?? [];
   };
 
   const queryMemos = useQuery<MemoData[]>([queryKey.memos], fetchMemos);

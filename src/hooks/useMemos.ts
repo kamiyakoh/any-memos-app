@@ -1,35 +1,24 @@
+import type { QueryObserverResult } from '@tanstack/react-query';
 import type { MemoData } from '../types';
-import { useRecoilState } from 'recoil';
-import { useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { memosState } from '../states/memosState';
 import { axiosInstance } from '../utils/axiosInstance';
 import { queryKey } from '../utils/queryKey';
 
 interface UseMemos {
-  memos: MemoData[];
-  data?: MemoData[];
-  setNewMemos: (newMemos: MemoData[]) => void;
+  memos?: MemoData[];
   fetchMemos: () => Promise<MemoData[]>;
+  refetchMemos: () => Promise<QueryObserverResult<MemoData[], unknown>>;
 }
 
 export const useMemos = (): UseMemos => {
-  // const [auth, setAuth] = useRecoilState(authState);
-  const [memos, setMemos] = useRecoilState(memosState);
-
-  const setNewMemos = useCallback(
-    (newMemos: MemoData[]) => {
-      setMemos(newMemos);
-    },
-    [setMemos],
-  );
-
   const fetchMemos = async (): Promise<MemoData[]> => {
     const result = await axiosInstance.get<{ memos: MemoData[] }>('/memos');
     return result.data.memos;
   };
 
-  const { data } = useQuery<MemoData[]>([queryKey.memos], fetchMemos);
+  const queryMemos = useQuery<MemoData[]>([queryKey.memos], fetchMemos);
+  const memos = queryMemos.data;
+  const refetchMemos = queryMemos.refetch;
 
-  return { memos, data, setNewMemos, fetchMemos };
+  return { memos, fetchMemos, refetchMemos };
 };

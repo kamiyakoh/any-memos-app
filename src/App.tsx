@@ -7,7 +7,6 @@ import { Toaster } from 'react-hot-toast';
 import { useApp } from './hooks/useApp';
 import { useHandleModal } from './hooks/useHandleModal';
 import { worker } from './serviceWorker';
-import { authState } from './states/authState';
 import { Modal } from './components/uiParts/Modal';
 import { Login } from './components/projects/Login';
 import { Menu } from './components/projects/Menu';
@@ -19,14 +18,13 @@ import { useLogin } from './hooks/useLogin';
 worker.start(); // eslint-disable-line @typescript-eslint/no-floating-promises
 
 export const App: FC = () => {
-  const isAuth = useRecoilValue(authState).isAuth;
   const { bgImg, bgFilter } = useApp();
   const { isOpenMenu, isOpenNew, openMenu, openNew, closeModal } = useHandleModal();
-  const { isLoading, fetchAuth } = useLogin();
+  const { isAuth, isLoading, fetchIsAuth } = useLogin();
 
   useEffect(() => {
-    fetchAuth();
-  }, [fetchAuth]);
+    fetchIsAuth();
+  }, [fetchIsAuth]);
 
   return (
     <div>

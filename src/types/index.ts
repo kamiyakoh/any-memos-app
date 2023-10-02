@@ -32,14 +32,6 @@ export interface MemoData {
   markDiv: number;
 }
 
-export interface FormValues {
-  title: string;
-  category: string;
-  description: string;
-  date: string;
-  isChecked: boolean;
-}
-
 export interface MenuOption {
   bgImg: BgImg;
   bgFilter: BgFilter;

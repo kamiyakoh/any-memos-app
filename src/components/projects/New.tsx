@@ -43,10 +43,18 @@ export const New: FC = () => {
           <input type="date" className="my-2 rounded-sm border-gray-400 border-2 shadow-sm" {...register('date')} />
         </label>
         <br />
-        <label htmlFor="isChecked">
-          マーク
+        <label>
+          マークを
           <br />
-          <input type="checkbox" {...register('isChecked')} />
+        </label>
+        <label>
+          <input type="radio" value={1} className="mr-2" {...register('markDiv')} />
+          ★（つける）
+          <br />
+        </label>
+        <label>
+          <input type="radio" value={0} defaultChecked className="mr-2" {...register('markDiv')} />
+          -（つけない）
         </label>
         <br />
         <button type="submit" className="px-4 py-2 mt-4 bg-blue-500 text-white rounded hover:bg-blue-600">

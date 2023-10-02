@@ -1,11 +1,18 @@
-import type { FormValues } from '../types';
 import type { UseFormRegister, UseFormHandleSubmit } from 'react-hook-form';
 import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLogin } from './useLogin';
+import { useMemos } from './useMemos';
 import { axiosInstance } from '../utils/axiosInstance';
 import toast from 'react-hot-toast';
 
+export interface FormValues {
+  title: string;
+  category: string;
+  description: string;
+  date: string;
+  markDiv: string;
+}
 interface UseNew {
   register: UseFormRegister<FormValues>;
   handleSubmit: UseFormHandleSubmit<FormValues>;
@@ -14,20 +21,19 @@ interface UseNew {
 
 export const useNew = (): UseNew => {
   const { handle401 } = useLogin();
+  const { refetchMemos } = useMemos();
   const { register, handleSubmit, reset } = useForm<FormValues>({
     defaultValues: {
       title: '',
       category: '',
       description: '',
       date: '',
-      isChecked: false,
+      markDiv: '0',
     },
   });
   const postMemo = useCallback(
     async (data: FormValues): Promise<void> => {
-      const { title, category, description, date, isChecked } = data;
-      let markDiv = 0;
-      if (isChecked) markDiv = 1;
+      const { title, category, description, date, markDiv } = data;
 
       try {
         const res = await axiosInstance.post('/memo', {
@@ -35,10 +41,11 @@ export const useNew = (): UseNew => {
           category,
           description,
           date,
-          markDiv,
+          markDiv: parseInt(markDiv, 10),
         });
 
         if (res.status === 200) {
+          await refetchMemos();
           reset();
           toast.success('新しいメモを作成しました');
         }
@@ -53,7 +60,7 @@ export const useNew = (): UseNew => {
         toast.error('エラーが発生しました');
       }
     },
-    [reset, handle401],
+    [reset, refetchMemos, handle401],
   );
 
   return { register, handleSubmit, postMemo };

@@ -16,7 +16,7 @@ export const useMemos = (): UseMemos => {
     return result.data.memos ?? [];
   };
 
-  const queryMemos = useQuery<MemoData[]>([queryKey.memos], fetchMemos);
+  const queryMemos = useQuery<MemoData[]>([queryKey.memos], fetchMemos, { refetchOnWindowFocus: false });
   const memos = queryMemos.data;
   const refetchMemos = queryMemos.refetch;
 

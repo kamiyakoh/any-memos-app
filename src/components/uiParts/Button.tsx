@@ -3,7 +3,7 @@ import { FC } from 'react';
 interface Props {
   type: 'submit' | 'reset' | 'button';
   className: string;
-  onClick: () => void;
+  onClick?: () => void;
   children: React.ReactNode;
 }
 

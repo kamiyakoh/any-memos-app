@@ -10,6 +10,7 @@ import { Modal } from './components/uiParts/Modal';
 import { Login } from './components/projects/Login';
 import { Menu } from './components/projects/Menu';
 import { New } from './components/projects/New';
+import { Edit } from './components/projects/Edit';
 import { Memos } from './components/pages/Memos';
 import menuIcon from './assets/img/menuIcon.png';
 import { useLogin } from './hooks/useLogin';
@@ -18,7 +19,8 @@ worker.start(); // eslint-disable-line @typescript-eslint/no-floating-promises
 
 export const App: FC = () => {
   const { bgImg, bgFilter } = useApp();
-  const { isOpenMenu, isOpenNew, openMenu, openNew, closeMenuModal, closeNewModal } = useHandleModal();
+  const { isOpenMenu, isOpenNew, edit, openMenu, openNew, closeMenuModal, closeNewModal, closeEditModal } =
+    useHandleModal();
   const { isAuth, isLoading, fetchIsAuth } = useLogin();
 
   useEffect(() => {
@@ -80,6 +82,9 @@ export const App: FC = () => {
           </div>
         )}
       </div>
+      <Modal isOpen={edit.isOpenEdit} isLogin={false} onClose={closeEditModal}>
+        {edit.isOpenEdit && <Edit memo={edit.editMemo} closeModal={closeEditModal} />}
+      </Modal>
       <Modal isOpen={isOpenNew} isLogin={false} onClose={closeNewModal}>
         {isOpenNew && <New />}
       </Modal>

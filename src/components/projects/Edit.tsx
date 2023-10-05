@@ -1,13 +1,24 @@
+import type { MemoData } from '../../types';
 import { FC } from 'react';
-import { useNew } from '../../hooks/useNew';
+import { useEdit } from '../../hooks/useEdit';
 import { Button } from '../uiParts/Button';
 
-export const New: FC = () => {
-  const { register, handleSubmit, postMemo } = useNew();
+interface Props {
+  memo: MemoData;
+  closeModal: () => void;
+}
+
+export const Edit: FC<Props> = ({ memo, closeModal }) => {
+  const { register, handleSubmit, editMemo } = useEdit(memo, closeModal);
 
   return (
     <div>
-      <form className="w-[80vw] max-w-screen-2xl" onSubmit={handleSubmit(postMemo)}>
+      <form className="w-[80vw] max-w-screen-2xl" onSubmit={handleSubmit(editMemo)}>
+        <label htmlFor="title">
+          ID： {memo.id}
+          <br />
+          <input type="text" value={memo.id} readOnly className="hidden" {...register('id')} />
+        </label>
         <label htmlFor="title">
           タイトル
           <br />
@@ -58,8 +69,8 @@ export const New: FC = () => {
           -（つけない）
         </label>
         <br />
-        <Button type="submit" className="mt-4 text-white bg-blue-500 hover:bg-blue-600">
-          作成
+        <Button type="submit" className="mt-4 text-white bg-green-600 hover:bg-green-700">
+          決定
         </Button>
       </form>
     </div>

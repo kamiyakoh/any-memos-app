@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import toast from 'react-hot-toast';
 import { menuOptionState } from '../states/menuOptionState';
+import { isShowBgPreviewState } from '../states/isShowBgPreviewState';
 
 interface BgImgOptions {
   value: BgImg;
@@ -18,15 +19,20 @@ interface UseMenu {
   isFixedBgFilter: boolean;
   bgImgOptions: BgImgOptions[];
   bgFilterOptions: BgFilterOptions[];
+  isShowBgPreview: boolean;
   handleBgImgChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleBgFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleAddMonth: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleAddHours: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onClickErrorToast: (isFixed: boolean) => void;
+  onClickShowBgPreview: () => void;
+  onClickCloseBgPreview: () => void;
+  onClickMenuReset: () => void;
 }
 
 export const useMenu = (): UseMenu => {
   const [menuOption, setMenuOption] = useRecoilState(menuOptionState);
+  const [isShowBgPreview, setIsShowBgPreview] = useRecoilState(isShowBgPreviewState);
   const [isFixedBgImg, setIsFixedBgImg] = useState(false);
   const [isFixedBgFilter, setIsFixedBgFilter] = useState(false);
   useEffect(() => {
@@ -100,6 +106,18 @@ export const useMenu = (): UseMenu => {
   const onClickErrorToast = (isFixed: boolean): void => {
     if (isFixed) toast.error(`変更するには"固定しない"を選択してください`);
   };
+  const onClickShowBgPreview = (): void => {
+    setIsShowBgPreview(true);
+    toast('背景プレビューを終了するには\n画面をタッチ・クリックしてください');
+  };
+  const onClickCloseBgPreview = (): void => {
+    setIsShowBgPreview(false);
+  };
+  const onClickMenuReset = (): void => {
+    if (window.confirm('メニューを初期化しますか？')) {
+      setMenuOption({ bgImg: 'unfixed', bgFilter: 'unfixed', addMonth: 0, addHours: 0 });
+    }
+  };
 
   return {
     menuOption,
@@ -107,10 +125,14 @@ export const useMenu = (): UseMenu => {
     isFixedBgFilter,
     bgImgOptions,
     bgFilterOptions,
+    isShowBgPreview,
     handleBgImgChange,
     handleBgFilterChange,
     handleAddMonth,
     handleAddHours,
     onClickErrorToast,
+    onClickShowBgPreview,
+    onClickCloseBgPreview,
+    onClickMenuReset,
   };
 };

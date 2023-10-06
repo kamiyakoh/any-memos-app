@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { useMenu } from '../../hooks/useMenu';
+import { Button } from '../uiParts/Button';
 
 export const Menu: FC = () => {
   const {
@@ -13,6 +14,8 @@ export const Menu: FC = () => {
     handleAddMonth,
     handleAddHours,
     onClickErrorToast,
+    onClickShowBgPreview,
+    onClickMenuReset,
   } = useMenu();
 
   return (
@@ -27,11 +30,12 @@ export const Menu: FC = () => {
         ))}
       </div>
       <div
-        className={`w-full pb-4 mt-6 mb-8 ${isFixedBgImg ? 'bg-black bg-opacity-60' : ''}`}
+        className={`relative w-full pb-4 mt-6 mb-8 ${isFixedBgImg ? 'bg-black bg-opacity-60' : ''}`}
         onClick={() => {
           onClickErrorToast(isFixedBgImg);
         }}
       >
+        {isFixedBgImg && <div className="absolute top-0 left-0 z-10 w-full h-full" />}
         <p>月調整</p>
         <label>
           +
@@ -59,14 +63,15 @@ export const Menu: FC = () => {
           </label>
         ))}
       </div>
-
-      <div className={`w-full pb-4 mt-6 ${isFixedBgFilter ? 'bg-black bg-opacity-60' : ''}`}>
+      <div
+        className={`relative w-full pb-4 mt-6 ${isFixedBgFilter ? 'bg-black bg-opacity-60' : ''}`}
+        onClick={() => {
+          onClickErrorToast(isFixedBgFilter);
+        }}
+      >
+        {isFixedBgFilter && <div className="absolute top-0 left-0 z-10 w-full h-full" />}
         <p>時間調整</p>
-        <label
-          onClick={() => {
-            onClickErrorToast(isFixedBgFilter);
-          }}
-        >
+        <label>
           {menuOption.addHours >= 0 && '+'}
           <input
             type="number"
@@ -77,6 +82,14 @@ export const Menu: FC = () => {
             disabled={isFixedBgFilter}
           />
         </label>
+      </div>
+      <div className="flex justify-between flex-wrap gap-4 text-white mt-6">
+        <Button type="button" className="bg-orange-500 hover:bg-orange-600" onClick={onClickShowBgPreview}>
+          背景プレビュー
+        </Button>
+        <Button type="button" className="bg-gray-500 hover:bg-gray-600" onClick={onClickMenuReset}>
+          メニュー初期化
+        </Button>
       </div>
     </div>
   );

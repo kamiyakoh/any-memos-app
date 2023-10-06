@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { useLogin } from '../../hooks/useLogin';
+import { Button } from '../uiParts/Button';
 
 export const Login: FC = () => {
   const { register, handleSubmit, handleLogin } = useLogin();
@@ -23,9 +24,9 @@ export const Login: FC = () => {
           />
         </label>
         <br />
-        <button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" type="submit">
+        <Button className="mt-4 text-white bg-violet-500 hover:bg-violet-600" type="submit">
           ログイン
-        </button>
+        </Button>
       </form>
     </div>
   );

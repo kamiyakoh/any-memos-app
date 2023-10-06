@@ -82,17 +82,17 @@ export const App: FC = () => {
           </div>
         )}
       </div>
-      <Modal isOpen={edit.isOpenEdit} isLogin={false} onClose={closeEditModal}>
+      <Modal isOpen={edit.isOpenEdit} isLogin={false} borderColorClass="border-green-600" onClose={closeEditModal}>
         {edit.isOpenEdit && <Edit memo={edit.editMemo} closeModal={closeEditModal} />}
       </Modal>
-      <Modal isOpen={isOpenNew} isLogin={false} onClose={closeNewModal}>
+      <Modal isOpen={isOpenNew} isLogin={false} borderColorClass="border-blue-500" onClose={closeNewModal}>
         {isOpenNew && <New />}
       </Modal>
-      <Modal isOpen={isOpenMenu} isLogin={false} onClose={closeMenuModal}>
+      <Modal isOpen={isOpenMenu} isLogin={false} borderColorClass="border-gray-500" onClose={closeMenuModal}>
         {isOpenMenu && <Menu />}
       </Modal>
       {!isLoading && (
-        <Modal isOpen={!isAuth} isLogin={true}>
+        <Modal isOpen={!isAuth} borderColorClass="border-violet-500" isLogin={true}>
           {!isAuth && <Login />}
         </Modal>
       )}

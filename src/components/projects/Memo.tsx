@@ -3,6 +3,8 @@ import { FC, useEffect } from 'react';
 import { useMemoSinle } from '../../hooks/useMemoSingle';
 import { useHandleModal } from '../../hooks/useHandleModal';
 import { Button } from '../uiParts/Button';
+import { DiffDays } from './DiffDays';
+import { jaDay } from '../../utils/date';
 
 interface Props {
   memo: MemoData;
@@ -33,7 +35,10 @@ export const Memo: FC<Props> = ({ memo }) => {
           <p>詳細説明：</p>
           <div className="max-w-full" dangerouslySetInnerHTML={{ __html: textFormatBr(memo.description) }} />
         </div>
-        <p>期限日時： {memo.date}</p>
+        <p>
+          期限日時： {jaDay(memo.date).format('YYYY/MM/DD (dd)')}&nbsp;
+          <DiffDays date={memo.date} isModal={false} />
+        </p>
         {memo.markDiv === 1 && (
           <span className="block text-4xl font-extrabold" style={{ lineHeight: 1 }}>
             ★

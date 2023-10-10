@@ -14,6 +14,7 @@ export interface FormValues {
   markDiv: string;
 }
 interface UseNew {
+  watchDate: string;
   register: UseFormRegister<FormValues>;
   handleSubmit: UseFormHandleSubmit<FormValues>;
   postMemo: (data: FormValues) => Promise<void>;
@@ -22,7 +23,7 @@ interface UseNew {
 export const useNew = (): UseNew => {
   const { handle401 } = useLogin();
   const { refetchMemos } = useMemos();
-  const { register, handleSubmit, reset } = useForm<FormValues>({
+  const { register, handleSubmit, watch, reset } = useForm<FormValues>({
     defaultValues: {
       title: '',
       category: '',
@@ -31,6 +32,7 @@ export const useNew = (): UseNew => {
       markDiv: '0',
     },
   });
+  const watchDate = watch('date', '');
   const postMemo = useCallback(
     async (data: FormValues): Promise<void> => {
       const { title, category, description, date, markDiv } = data;
@@ -63,5 +65,5 @@ export const useNew = (): UseNew => {
     [reset, refetchMemos, handle401],
   );
 
-  return { register, handleSubmit, postMemo };
+  return { watchDate, register, handleSubmit, postMemo };
 };

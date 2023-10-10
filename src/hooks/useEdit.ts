@@ -16,6 +16,7 @@ interface EditFormValues {
   markDiv: string;
 }
 interface UseEdit {
+  watchDate: string;
   register: UseFormRegister<EditFormValues>;
   handleSubmit: UseFormHandleSubmit<EditFormValues>;
   editMemo: (data: EditFormValues) => Promise<void>;
@@ -24,7 +25,7 @@ interface UseEdit {
 export const useEdit = (memo: MemoData, closeModal: () => void): UseEdit => {
   const { handle401 } = useLogin();
   const { refetchMemos } = useMemos();
-  const { register, handleSubmit, reset } = useForm<EditFormValues>({
+  const { register, handleSubmit, watch, reset } = useForm<EditFormValues>({
     defaultValues: {
       id: memo.id,
       title: memo.title,
@@ -34,6 +35,7 @@ export const useEdit = (memo: MemoData, closeModal: () => void): UseEdit => {
       markDiv: memo.markDiv.toString(),
     },
   });
+  const watchDate = watch('date');
   const editMemo = useCallback(
     async (data: EditFormValues): Promise<void> => {
       const { id, title, category, description, date, markDiv } = data;
@@ -72,5 +74,5 @@ export const useEdit = (memo: MemoData, closeModal: () => void): UseEdit => {
     [reset, refetchMemos, closeModal, handle401],
   );
 
-  return { register, handleSubmit, editMemo };
+  return { watchDate, register, handleSubmit, editMemo };
 };

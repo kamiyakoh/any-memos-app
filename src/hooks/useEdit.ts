@@ -4,6 +4,7 @@ import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLogin } from './useLogin';
 import { useMemos } from './useMemos';
+import { useCategory } from './useCategory';
 import { axiosInstance } from '../utils/axiosInstance';
 import toast from 'react-hot-toast';
 
@@ -25,6 +26,7 @@ interface UseEdit {
 export const useEdit = (memo: MemoData, closeModal: () => void): UseEdit => {
   const { handle401 } = useLogin();
   const { refetchMemos } = useMemos();
+  const { addPickCategories } = useCategory();
   const { register, handleSubmit, watch, reset } = useForm<EditFormValues>({
     defaultValues: {
       id: memo.id,
@@ -52,6 +54,7 @@ export const useEdit = (memo: MemoData, closeModal: () => void): UseEdit => {
 
         if (res.status === 200) {
           await refetchMemos();
+          addPickCategories(category);
           reset();
           toast.success(
             `ID：${id}\nタイトル：${title}\n${
@@ -71,7 +74,7 @@ export const useEdit = (memo: MemoData, closeModal: () => void): UseEdit => {
         toast.error('エラーが発生しました');
       }
     },
-    [reset, refetchMemos, closeModal, handle401],
+    [addPickCategories, reset, refetchMemos, closeModal, handle401],
   );
 
   return { watchDate, register, handleSubmit, editMemo };

@@ -3,6 +3,7 @@ import { FC, useEffect } from 'react';
 import { useMemoSinle } from '../../hooks/useMemoSingle';
 import { useHandleModal } from '../../hooks/useHandleModal';
 import { Button } from '../uiParts/Button';
+import { FrostedGlass } from '../uiParts/FrostedGlass';
 import { DiffDays } from './DiffDays';
 import { jaDay } from '../../utils/date';
 
@@ -21,9 +22,8 @@ export const Memo: FC<Props> = ({ memo }) => {
   }, [currentIdOpenDel, memo, closeDel]);
 
   return (
-    <div
-      className="flex flex-col justify-between break-words whitespace-pre-wrap bg-black bg-opacity-50 rounded p-4 w-full md:w-[calc(50%_-_0.5rem)]"
-      style={{ backdropFilter: 'blur(4px)' }}
+    <FrostedGlass
+      className={'flex flex-col justify-between break-words whitespace-pre-wrap w-full md:w-[calc(50%_-_0.5rem)]'}
     >
       <div className="space-y-2">
         <div className="flex gap-x-2">
@@ -84,6 +84,6 @@ export const Memo: FC<Props> = ({ memo }) => {
           )}
         </div>
       </div>
-    </div>
+    </FrostedGlass>
   );
 };

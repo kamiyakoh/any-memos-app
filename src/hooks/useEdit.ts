@@ -53,13 +53,16 @@ export const useEdit = (memo: MemoData, closeModal: () => void): UseEdit => {
         });
 
         if (res.status === 200) {
+          const prevTitle = memo.title;
+          const prevCat = memo.category;
           await refetchMemos();
           addPickCategories(category);
           reset();
           toast.success(
-            `ID：${id}\nタイトル：${title}\n${
-              category !== '' ? 'カテゴリー：' + category + '\n' : ''
-            }のメモを編集しました`,
+            `ID：${id}\n
+            タイトル：${prevTitle !== title ? prevTitle + ' ⇒ ' : ''}${title}\n
+            カテゴリー：${prevCat !== category ? prevCat + ' ⇒ ' : ''}${category}\n
+            のメモを編集しました`,
           );
           closeModal();
         }
@@ -74,7 +77,7 @@ export const useEdit = (memo: MemoData, closeModal: () => void): UseEdit => {
         toast.error('エラーが発生しました');
       }
     },
-    [addPickCategories, reset, refetchMemos, closeModal, handle401],
+    [memo, addPickCategories, reset, refetchMemos, closeModal, handle401],
   );
 
   return { watchDate, register, handleSubmit, editMemo };

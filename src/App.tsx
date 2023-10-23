@@ -128,7 +128,17 @@ export const App: FC = () => {
       )}
       <Toaster
         toastOptions={{
-          style: { background: 'rgba(0, 0, 0, 0.5)', color: '#fff', padding: '1rem', backdropFilter: 'blur(4px)' },
+          style: {
+            // overflowWrap: 'break-word',
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            background: 'rgba(0, 0, 0, 0.5)',
+            color: '#fff',
+            maxWidth: '90vw',
+            padding: '1rem',
+            backdropFilter: 'blur(4px)',
+          },
         }}
       />
     </div>

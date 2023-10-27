@@ -1,8 +1,5 @@
-import { FC, Suspense, useEffect } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
-// import { BrowserRouter } from 'react-router-dom';
+import { FC, useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
-// import { Router } from './routers/Router';
 import { useApp } from './hooks/useApp';
 import { useHandleModal } from './hooks/useHandleModal';
 import { useLogin } from './hooks/useLogin';
@@ -15,7 +12,7 @@ import { Menu } from './components/projects/Menu';
 import { New } from './components/projects/New';
 import { Category } from './components/projects/Category';
 import { Edit } from './components/projects/Edit';
-import { Memos } from './components/pages/Memos';
+import { Contents } from './components/pages/Contents';
 import menuIcon from './assets/img/menuIcon.png';
 
 worker.start(); // eslint-disable-line @typescript-eslint/no-floating-promises
@@ -75,42 +72,12 @@ export const App: FC = () => {
         >
           {isShowBgPreview && <button className="w-full h-full" onClick={onClickCloseBgPreview} />}
         </div>
-        {isAuth && (
-          <div
-            className={`absolute top-0 left-0 z-40 text-white w-full overflow-y-auto  ${
-              isShowBgPreview ? 'hidden' : ''
-            }`}
-          >
-            <div className="max-h-screen pt-[5.5rem]">
-              <ErrorBoundary
-                fallback={
-                  <div className="flex justify-center">
-                    <p className="bg-black bg-opacity-50 rounded p-4 mb4" style={{ backdropFilter: 'blur(4px)' }}>
-                      メモデータを読み込みに失敗しました
-                    </p>
-                  </div>
-                }
-              >
-                <Suspense
-                  fallback={
-                    <div className="flex justify-center">
-                      <p className="bg-black bg-opacity-50 rounded p-4 mb4" style={{ backdropFilter: 'blur(4px)' }}>
-                        メモデータを読み込み中...
-                      </p>
-                    </div>
-                  }
-                >
-                  <Memos />
-                </Suspense>
-              </ErrorBoundary>
-            </div>
-          </div>
-        )}
+        {isAuth && <Contents />}
       </div>
       <Modal isOpen={edit.isOpenEdit} isLogin={false} borderColorClass="border-green-600" onClose={closeEditModal}>
         {edit.isOpenEdit && <Edit memo={edit.editMemo} closeModal={closeEditModal} />}
       </Modal>
-      <Modal isOpen={isOpenCategory} isLogin={false} borderColorClass="border-orenge-500" onClose={closeCategory}>
+      <Modal isOpen={isOpenCategory} isLogin={false} borderColorClass="border-yellow-500" onClose={closeCategory}>
         {isOpenCategory && <Category />}
       </Modal>
       <Modal isOpen={isOpenNew} isLogin={false} borderColorClass="border-blue-500" onClose={closeNewModal}>
@@ -129,7 +96,6 @@ export const App: FC = () => {
       <Toaster
         toastOptions={{
           style: {
-            // overflowWrap: 'break-word',
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis',
             overflow: 'hidden',

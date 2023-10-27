@@ -6,7 +6,7 @@ import { useMemos } from '../../hooks/useMemos';
 import { pickCategoriesState } from '../../states/pickCategoriesState';
 import { Button } from '../uiParts/Button';
 import { FrostedGlass } from '../uiParts/FrostedGlass';
-import { Memo } from '../projects/Memo';
+import { Memo } from './Memo';
 
 export const Memos: FC = () => {
   const { openCategory } = useHandleModal();
@@ -25,6 +25,7 @@ export const Memos: FC = () => {
     handlePickDiffChange,
     handleMarkDivChange,
     pickMemos,
+    showMemosDel,
   } = useMemos();
 
   useEffect(() => {
@@ -79,9 +80,19 @@ export const Memos: FC = () => {
             </label>
           ))}
         </div>
-        <Button type="button" className="self-center bg-orange-500 hover:bg-orange-600" onClick={openCategory}>
-          カテゴリー
-        </Button>
+        <div className="flex flex-col items-start justify-between gap-y-6">
+          <Button
+            type="button"
+            className="self-center bg-yellow-500 hover:bg-yellow-600"
+            style={{ textShadow: '0.5px 0.5px 0 #000' }}
+            onClick={openCategory}
+          >
+            カテゴリー
+          </Button>
+          <Button type="button" className="self-center bg-red-500 hover:bg-red-600" onClick={showMemosDel}>
+            まとめて削除
+          </Button>
+        </div>
       </FrostedGlass>
       <div className="flex flex-wrap w-full max-w-[1920px] gap-4 mx-auto">
         {showMemos?.map((memo) => <Memo key={memo.id} memo={memo} />)}

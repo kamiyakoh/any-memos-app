@@ -18,7 +18,7 @@ interface UseMemo {
   textFormatBr: (text: string) => string;
 }
 
-export const useMemoSinle = (): UseMemo => {
+export const useMemoSingle = (): UseMemo => {
   const [isOpenDel, setIsOpenDel] = useState<boolean>(false);
   const { handle401 } = useLogin();
   const { refetchMemos } = useMemos();

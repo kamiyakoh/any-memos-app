@@ -4,14 +4,39 @@ import { useCategory } from '../../hooks/useCategory';
 
 export const Category: FC = () => {
   const { categories } = useMemos();
-  const { pickCategories, handlePickCategoryChange, categoryLabel } = useCategory();
+  const {
+    selectAllChecked,
+    pickCategories,
+    selectAllCategories,
+    deselectAllCategories,
+    handlePickCategoryChange,
+    categoryLabel,
+  } = useCategory();
 
   return (
     <div>
-      <h2 className="text-center">カテゴリー</h2>
-      <div className="flex flex-wrap gap-4 mt-4">
+      <div className="flex justify-center gap-8">
+        <h2 className="font-bold">カテゴリー</h2>
+        <label>
+          <input
+            type="checkbox"
+            value="selectAll"
+            checked={selectAllChecked}
+            onChange={() => {
+              if (selectAllChecked) {
+                deselectAllCategories();
+              } else {
+                selectAllCategories();
+              }
+            }}
+          />
+          &nbsp;全て選択
+        </label>
+      </div>
+
+      <div className="flex flex-wrap gap-4 mt-4 break-words whitespace-pre-wrap">
         {categories.map((cat) => (
-          <label key={cat}>
+          <label key={cat} className="max-w-full">
             <input
               type="checkbox"
               value={cat}

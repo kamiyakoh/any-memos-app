@@ -3,7 +3,7 @@ import type { MemoData } from '../types';
 import { useState, useMemo, useCallback } from 'react';
 import { useRecoilState } from 'recoil';
 import { useQuery } from '@tanstack/react-query';
-// import { useCategory } from './useCategory';
+import toast from 'react-hot-toast';
 import { categoriesState } from '../states/categories';
 import { axiosInstance } from '../utils/axiosInstance';
 import { queryKey } from '../utils/queryKey';
@@ -46,6 +46,7 @@ interface UseMemos {
     pickMarkDiv: PickMarkDiv,
     categories: string[],
   ) => void;
+  showMemosDel: () => void;
 }
 
 export const useMemos = (): UseMemos => {
@@ -54,7 +55,6 @@ export const useMemos = (): UseMemos => {
   const [pickMarkDiv, setPickMarkDiv] = useState<PickMarkDiv>('-1');
   const [showMemos, setShowMemos] = useState<MemoData[]>([]);
   const [categories, setCategories] = useRecoilState<string[]>(categoriesState);
-  // const { pickCategories } = useCategory();
 
   const fetchMemos = async (): Promise<MemoData[]> => {
     const result = await axiosInstance.get<{ memos: MemoData[] }>('/memos');
@@ -189,6 +189,38 @@ export const useMemos = (): UseMemos => {
     },
     [memos, sortMemos],
   );
+  const showMemosDel = useCallback((): void => {
+    const delIds = showMemos.map((memo) => parseInt(memo.id, 10)).sort((a, b) => b - a);
+    if (confirm(`表示中の${delIds.length}件のメモを本当にまとめて削除しますか？`)) {
+      let success = 0;
+      let error = 0;
+
+      const deleteMemo = async (id: number): Promise<void> => {
+        try {
+          const res = await axiosInstance.delete<MemoData | { errorMessage: string }>(`/memo/${id.toString()}`);
+          if (res.status === 200) {
+            success++;
+          } else {
+            error++;
+          }
+        } catch {
+          error++;
+        }
+      };
+
+      const deletePromises = delIds.map(deleteMemo);
+
+      Promise.all(deletePromises)
+        .then(async () => {
+          toast(`${success > 0 ? success.toString() + '件のメモを削除しました\n' : ''}
+        ${error > 0 ? error.toString() + '件のメモが削除できませんでした' : ''}`);
+          await refetchMemos();
+        })
+        .catch((err) => {
+          console.error('Error deleting memos:', err);
+        });
+    }
+  }, [showMemos, refetchMemos]);
 
   return {
     sortIdDate,
@@ -206,5 +238,6 @@ export const useMemos = (): UseMemos => {
     handlePickDiffChange,
     handleMarkDivChange,
     pickMemos,
+    showMemosDel,
   };
 };

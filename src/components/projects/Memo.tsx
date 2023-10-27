@@ -1,6 +1,6 @@
 import type { MemoData } from '../../types';
 import { FC, useEffect } from 'react';
-import { useMemoSinle } from '../../hooks/useMemoSingle';
+import { useMemoSingle } from '../../hooks/useMemoSingle';
 import { useHandleModal } from '../../hooks/useHandleModal';
 import { Button } from '../uiParts/Button';
 import { FrostedGlass } from '../uiParts/FrostedGlass';
@@ -12,7 +12,7 @@ interface Props {
 }
 
 export const Memo: FC<Props> = ({ memo }) => {
-  const { isOpenDel, currentIdOpenDel, openDel, closeDel, delMemo, textFormatBr } = useMemoSinle();
+  const { isOpenDel, currentIdOpenDel, openDel, closeDel, delMemo, textFormatBr } = useMemoSingle();
   const { openEdit } = useHandleModal();
 
   useEffect(() => {

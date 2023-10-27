@@ -1,19 +1,40 @@
-import { useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { categoriesState } from '../states/categories';
 import { pickCategoriesState } from '../states/pickCategoriesState';
 
 interface UseCategory {
+  selectAllChecked: boolean;
   categories: string[];
   pickCategories: string[];
+  selectAllCategories: () => void;
+  deselectAllCategories: () => void;
   addPickCategories: (category: string) => void;
   handlePickCategoryChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   categoryLabel: (category: string) => string;
 }
 
 export const useCategory = (): UseCategory => {
+  const [selectAllChecked, setSelectAllChecked] = useState<boolean>(false);
   const categories = useRecoilValue<string[]>(categoriesState);
   const [pickCategories, setPickCatategories] = useRecoilState(pickCategoriesState);
+
+  useEffect(() => {
+    setSelectAllChecked(pickCategories.length === categories.length);
+  }, [pickCategories, categories]);
+
+  // 全て選択ボタンがクリックされたとき
+  const selectAllCategories = (): void => {
+    setSelectAllChecked(true);
+    const allCategories = categories;
+    setPickCatategories(allCategories);
+  };
+
+  // 全て解除ボタンがクリックされたとき
+  const deselectAllCategories = (): void => {
+    setSelectAllChecked(false);
+    setPickCatategories([]);
+  };
 
   const addPickCategories = useCallback(
     (Category: string): void => {
@@ -46,5 +67,14 @@ export const useCategory = (): UseCategory => {
     return category;
   }, []);
 
-  return { categories, pickCategories, addPickCategories, handlePickCategoryChange, categoryLabel };
+  return {
+    selectAllChecked,
+    categories,
+    pickCategories,
+    selectAllCategories,
+    deselectAllCategories,
+    addPickCategories,
+    handlePickCategoryChange,
+    categoryLabel,
+  };
 };

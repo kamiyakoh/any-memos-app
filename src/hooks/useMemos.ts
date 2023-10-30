@@ -4,6 +4,7 @@ import { useState, useMemo, useCallback } from 'react';
 import { useRecoilState } from 'recoil';
 import { useQuery } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
+import { useLogin } from './useLogin';
 import { categoriesState } from '../states/categories';
 import { axiosInstance } from '../utils/axiosInstance';
 import { queryKey } from '../utils/queryKey';
@@ -55,6 +56,7 @@ export const useMemos = (): UseMemos => {
   const [pickMarkDiv, setPickMarkDiv] = useState<PickMarkDiv>('-1');
   const [showMemos, setShowMemos] = useState<MemoData[]>([]);
   const [categories, setCategories] = useRecoilState<string[]>(categoriesState);
+  const { handle401 } = useLogin();
 
   const fetchMemos = async (): Promise<MemoData[]> => {
     const result = await axiosInstance.get<{ memos: MemoData[] }>('/memos');
@@ -189,38 +191,48 @@ export const useMemos = (): UseMemos => {
     },
     [memos, sortMemos],
   );
-  const showMemosDel = useCallback((): void => {
+  const showMemosDel = useCallback(async () => {
     const delIds = showMemos.map((memo) => parseInt(memo.id, 10)).sort((a, b) => b - a);
+
     if (confirm(`表示中の${delIds.length}件のメモを本当にまとめて削除しますか？`)) {
-      let success = 0;
-      let error = 0;
+      try {
+        const res = await axiosInstance.get('/memos');
 
-      const deleteMemo = async (id: number): Promise<void> => {
-        try {
-          const res = await axiosInstance.delete<MemoData | { errorMessage: string }>(`/memo/${id.toString()}`);
-          if (res.status === 200) {
-            success++;
-          } else {
-            error++;
-          }
-        } catch {
-          error++;
-        }
-      };
+        if (res.status === 200) {
+          let success = 0;
+          let error = 0;
 
-      const deletePromises = delIds.map(deleteMemo);
+          const deleteMemo = async (id: number): Promise<void> => {
+            try {
+              const res = await axiosInstance.delete<MemoData | { errorMessage: string }>(`/memo/${id.toString()}`);
+              if (res.status === 200) {
+                success++;
+              } else {
+                error++;
+              }
+            } catch (err) {
+              error++;
+              console.error('Error deleting memo:', err);
+            }
+          };
 
-      Promise.all(deletePromises)
-        .then(async () => {
+          const deletePromises = delIds.map(deleteMemo);
+
+          await Promise.all(deletePromises);
+
           toast(`${success > 0 ? success.toString() + '件のメモを削除しました\n' : ''}
-        ${error > 0 ? error.toString() + '件のメモが削除できませんでした' : ''}`);
+            ${error > 0 ? error.toString() + '件のメモが削除できませんでした' : ''}`);
+
           await refetchMemos();
-        })
-        .catch((err) => {
-          console.error('Error deleting memos:', err);
-        });
+        }
+        if (res.status === 401) {
+          handle401();
+        }
+      } catch (err) {
+        console.error('Error fetching memos:', err);
+      }
     }
-  }, [showMemos, refetchMemos]);
+  }, [showMemos, handle401, refetchMemos]);
 
   return {
     sortIdDate,

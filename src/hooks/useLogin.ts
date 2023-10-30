@@ -26,7 +26,7 @@ interface UseLogin {
 export const useLogin = (): UseLogin => {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuth, setIsAuth] = useRecoilState<boolean>(isAuthState);
-  const { closeNewModal } = useHandleModal();
+  const { closeNewModal, closeEditModal } = useHandleModal();
   const { register, handleSubmit } = useForm<InputLogin>({
     defaultValues: {
       email: '',
@@ -75,9 +75,10 @@ export const useLogin = (): UseLogin => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('accessTokenExp');
     closeNewModal();
+    closeEditModal();
     toast.error('権限がありません\n再ログインしてください');
     setIsAuth(false);
-  }, [closeNewModal, setIsAuth]);
+  }, [closeNewModal, closeEditModal, setIsAuth]);
 
   return { isAuth, isLoading, setIsAuth, register, handleSubmit, fetchIsAuth, handleLogin, handle401 };
 };

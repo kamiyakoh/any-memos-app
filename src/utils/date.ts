@@ -38,3 +38,19 @@ export const jaDay = (
   dayjs.locale(ja);
   return dayjs(date, format, strict);
 };
+
+export const weekDayJa = (
+  weekDayFormat: 'd' | 'dd' | 'ddd' | 'dddd',
+  date?: string | number | Date | dayjs.Dayjs | null,
+  format?: dayjs.OptionType,
+  strict?: boolean,
+): { color: string; weekDayString: string } => {
+  dayjs.locale(ja);
+  const weekDayString = dayjs(date, format, strict).format(weekDayFormat).toString();
+  const weekDayNum = dayjs(date, format, strict).day();
+
+  let color = 'text-white';
+  if (weekDayNum === 0) color = 'red';
+  if (weekDayNum === 6) color = 'blue';
+  return { color, weekDayString };
+};

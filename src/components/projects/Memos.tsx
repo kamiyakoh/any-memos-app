@@ -2,7 +2,6 @@ import { FC, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import { useHandleModal } from '../../hooks/useHandleModal';
 import { useMemos } from '../../hooks/useMemos';
-// import { useCategory } from '../../hooks/useCategory';
 import { pickCategoriesState } from '../../states/pickCategoriesState';
 import { Button } from '../uiParts/Button';
 import { FrostedGlass } from '../uiParts/FrostedGlass';
@@ -10,7 +9,6 @@ import { Memo } from './Memo';
 
 export const Memos: FC = () => {
   const { openCategory } = useHandleModal();
-  // const { pickCategories } = useCategory();
   const [pickCategories, setPickCatategories] = useRecoilState(pickCategoriesState);
   const {
     sortIdDate,
@@ -89,7 +87,15 @@ export const Memos: FC = () => {
           >
             カテゴリー
           </Button>
-          <Button type="button" className="self-center bg-red-500 hover:bg-red-600" onClick={showMemosDel}>
+          <Button
+            type="button"
+            className={`self-center  ${
+              showMemos !== undefined && showMemos?.length > 0
+                ? 'bg-red-500 hover:bg-red-600 pointer-events-auto'
+                : 'bg-gray-500 pointer-events-none'
+            }`}
+            onClick={showMemosDel}
+          >
             まとめて削除
           </Button>
         </div>

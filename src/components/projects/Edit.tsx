@@ -2,7 +2,8 @@ import type { MemoData } from '../../types';
 import { FC } from 'react';
 import { useEdit } from '../../hooks/useEdit';
 import { Button } from '../uiParts/Button';
-import { DiffDays } from './DiffDays';
+import { DiffDays } from '../uiParts/DiffDays';
+import { WeekDayJa } from '../uiParts/WeekDayJa';
 
 interface Props {
   memo: MemoData;
@@ -54,6 +55,8 @@ export const Edit: FC<Props> = ({ memo, closeModal }) => {
           期限日時
           <br />
           <input type="date" className="my-2 rounded-sm border-gray-400 border-2 shadow-sm" {...register('date')} />
+          &nbsp;&nbsp;
+          <WeekDayJa date={watchDate} isModal={true} />
           &nbsp;&nbsp;
           <DiffDays date={watchDate} isModal={true} />
         </label>

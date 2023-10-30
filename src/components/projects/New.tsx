@@ -1,7 +1,8 @@
 import { FC } from 'react';
 import { useNew } from '../../hooks/useNew';
-import { DiffDays } from './DiffDays';
 import { Button } from '../uiParts/Button';
+import { DiffDays } from '../uiParts/DiffDays';
+import { WeekDayJa } from '../uiParts/WeekDayJa';
 
 export const New: FC = () => {
   const { watchDate, register, handleSubmit, postMemo } = useNew();
@@ -43,6 +44,8 @@ export const New: FC = () => {
           期限日時
           <br />
           <input type="date" className="my-2 rounded-sm border-gray-400 border-2 shadow-sm" {...register('date')} />
+          &nbsp;&nbsp;
+          <WeekDayJa date={watchDate} isModal={true} />
           &nbsp;&nbsp;
           <DiffDays date={watchDate} isModal={true} />
         </label>

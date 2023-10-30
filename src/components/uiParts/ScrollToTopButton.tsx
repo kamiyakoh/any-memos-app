@@ -1,7 +1,6 @@
 import { FC } from 'react';
 
 interface Props {
-  // isVisible: boolean;
   className?: string;
   style?: React.CSSProperties;
   onClick: () => void;

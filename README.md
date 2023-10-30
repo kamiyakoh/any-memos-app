@@ -1,46 +1,43 @@
-# Getting Started with Create React App
+# any-memos-app
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**"any-memos-app"** は create-react-app で作成しました  
+多目的メモアプリです
+本アプリは仮のAPIとして Mock Service Worker を使用しています
+メモはローカルストレージに保存されますので、機密情報など外部に流出してはいけない内容は入力しないでくだい
+メモを作成・編集時にタイトル・期限日時を必ず入力してください
 
-## Available Scripts
+## 機能
 
-In the project directory, you can run:
+- 初期設定では季節ごとに背景画像が変わり、背景画像に時間帯に応じた色フィルターが掛かります
+- 上記の機能は設定ボタン（歯車ボタン）を押し、設定ウィンドウから任意の背景設定に変更することが出来ます
+- 表示メモの並び替え・絞り込み機能に対応しており、カテゴリーの絞り込みはカテゴリーボタンを押してカテゴリーウィンドウから選択します
+- 表示メモの絞り込みを行ってからまとめて削除ボタンを押すと、表示中のメモをまとめて削除します（絞り込み機能で非表示にしているメモは削除されません）
+- 絞り込み機能で全てのメモを表示してまとめて削除ボタンを押すと全てのメモを削除します
 
-### `yarn start`
+## 作成環境
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- node.js 18.16.0
+- yarn 1.22.5
+- react 18.2.0
+- react-error-boundary 4.0.11
+- react-hook-form 7.46.1
+- react-hot-toast 2.4.1
+- @tanstack/react-query 4.35.3
+- tailwindcss 3.3.3
+- msw 1.2.3
+- axios 1.4.0
+- dayjs 1.11.9
+- recoil 0.7.7
+- TypeScript 5.1.3
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## 使い方
 
-### `yarn test`
+1. `$ yarn start` とターミナルにて入力で起動します
+2. ブラウザにて "http://localhost:3000/" を開くと表示されます
+3. ターミナルにて **"Crtl + c"** または **"cmd + c"** で停止します
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+※テスト用のログインメールアドレスは hoge@example.com
+パスワードは exam
 
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+ログインから24時間経過でログイン権限が失効になります
+アプリを再操作するには再度ログインしてください

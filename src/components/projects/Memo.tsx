@@ -2,10 +2,11 @@ import type { MemoData } from '../../types';
 import { FC, useEffect } from 'react';
 import { useMemoSingle } from '../../hooks/useMemoSingle';
 import { useHandleModal } from '../../hooks/useHandleModal';
+import { jaDay } from '../../utils/date';
 import { Button } from '../uiParts/Button';
 import { FrostedGlass } from '../uiParts/FrostedGlass';
-import { DiffDays } from './DiffDays';
-import { jaDay } from '../../utils/date';
+import { DiffDays } from '../uiParts/DiffDays';
+import { WeekDayJa } from '../uiParts/WeekDayJa';
 
 interface Props {
   memo: MemoData;
@@ -36,7 +37,9 @@ export const Memo: FC<Props> = ({ memo }) => {
           <div className="max-w-full" dangerouslySetInnerHTML={{ __html: textFormatBr(memo.description) }} />
         </div>
         <p>
-          期限日時： {jaDay(memo.date).format('YYYY/MM/DD (dd)')}&nbsp;
+          期限日時： {jaDay(memo.date).format('YYYY/MM/DD')}&nbsp;
+          <WeekDayJa date={memo.date} isModal={false} />
+          &nbsp;
           <DiffDays date={memo.date} isModal={false} />
         </p>
         {memo.markDiv === 1 && (

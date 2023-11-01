@@ -1,14 +1,13 @@
 import { FC } from 'react';
 import { useMenu } from '../../hooks/useMenu';
 import { Button } from '../uiParts/Button';
+import { bgImgOptions, bgFilterOptions } from '../../utils/const';
 
 export const Menu: FC = () => {
   const {
     menuOption,
     isFixedBgImg,
     isFixedBgFilter,
-    bgImgOptions,
-    bgFilterOptions,
     handleBgImgChange,
     handleBgFilterChange,
     handleAddMonth,

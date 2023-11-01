@@ -3,6 +3,7 @@ import { useRecoilState } from 'recoil';
 import { useHandleModal } from '../../hooks/useHandleModal';
 import { useMemos } from '../../hooks/useMemos';
 import { pickCategoriesState } from '../../states/pickCategoriesState';
+import { sortIdDateRadio, pickDateDiffRadio, pickMarkDivRadio } from '../../utils/const';
 import { Button } from '../uiParts/Button';
 import { FrostedGlass } from '../uiParts/FrostedGlass';
 import { Memo } from './Memo';
@@ -16,9 +17,6 @@ export const Memos: FC = () => {
     pickMarkDiv,
     showMemos,
     categories,
-    sortIdDateRadio,
-    pickDateDiffRadio,
-    pickMarkDivRadio,
     handleSortIdDateChange,
     handlePickDiffChange,
     handleMarkDivChange,

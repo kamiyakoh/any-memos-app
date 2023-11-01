@@ -1,24 +1,15 @@
-import type { BgImg, BgFilter, MenuOption } from '../types';
+import type { MenuOption } from '../types';
 import { useState, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import toast from 'react-hot-toast';
 import { menuOptionState } from '../states/menuOptionState';
 import { isShowBgPreviewState } from '../states/isShowBgPreviewState';
+import { bgImgOptions, bgFilterOptions } from '../utils/const';
 
-interface BgImgOptions {
-  value: BgImg;
-  label: string;
-}
-interface BgFilterOptions {
-  value: BgFilter;
-  label: string;
-}
 interface UseMenu {
   menuOption: MenuOption;
   isFixedBgImg: boolean;
   isFixedBgFilter: boolean;
-  bgImgOptions: BgImgOptions[];
-  bgFilterOptions: BgFilterOptions[];
   isShowBgPreview: boolean;
   handleBgImgChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleBgFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -48,13 +39,6 @@ export const useMenu = (): UseMenu => {
     }
   }, [menuOption.bgImg, menuOption.bgFilter]);
 
-  const bgImgOptions: BgImgOptions[] = [
-    { value: 'unfixed', label: '画像を固定しない' },
-    { value: 'spring', label: '春' },
-    { value: 'summer', label: '夏' },
-    { value: 'autumn', label: '秋' },
-    { value: 'winter', label: '冬' },
-  ];
   const handleBgImgChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const selectedValue = event.target.value;
     const selectedOption = bgImgOptions.find((op) => op.value === selectedValue) ?? {
@@ -66,13 +50,6 @@ export const useMenu = (): UseMenu => {
     }
   };
 
-  const bgFilterOptions: BgFilterOptions[] = [
-    { value: 'unfixed', label: '時間帯を固定しない' },
-    { value: 'midnight', label: '深夜 (0時 ～ 6時)' },
-    { value: 'morning', label: '朝 (6時 ～ 12時)' },
-    { value: 'afternoon', label: '昼 (12時 ～ 18時)' },
-    { value: 'evening', label: '夕宵 (18時 ～ 24時)' },
-  ];
   const handleBgFilterChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const selectedValue = event.target.value;
     const selectedOption = bgFilterOptions.find((op) => op.value === selectedValue) ?? {
@@ -123,8 +100,6 @@ export const useMenu = (): UseMenu => {
     menuOption,
     isFixedBgImg,
     isFixedBgFilter,
-    bgImgOptions,
-    bgFilterOptions,
     isShowBgPreview,
     handleBgImgChange,
     handleBgFilterChange,

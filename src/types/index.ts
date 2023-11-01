@@ -18,6 +18,9 @@ export type MixBlendMode =
 
 export type BgImg = 'unfixed' | 'spring' | 'summer' | 'autumn' | 'winter';
 export type BgFilter = 'unfixed' | 'midnight' | 'morning' | 'afternoon' | 'evening';
+export type SortIdDate = 'idAsc' | 'idDesc' | 'dateAsc' | 'dateDesc';
+export type PickDateDiff = 'all' | 'rest' | 'over';
+export type PickMarkDiv = '-1' | '0' | '1';
 
 export interface AccessToken {
   accessToken: string;

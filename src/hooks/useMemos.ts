@@ -1,12 +1,13 @@
 import type { QueryObserverResult } from '@tanstack/react-query';
 import type { SortIdDate, PickDateDiff, PickMarkDiv, MemoData } from '../types';
-import { useState, useCallback } from 'react';
-import { useRecoilState } from 'recoil';
+import { useState, useCallback, useMemo } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { useQuery } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import dayjs from 'dayjs';
 import { useLogin } from './useLogin';
 import { categoriesState } from '../states/categories';
+import { pickCategoriesState } from '../states/pickCategoriesState';
 import { axiosInstance } from '../utils/axiosInstance';
 import { queryKey } from '../utils/queryKey';
 import { diffFromNowYD } from '../utils/date';
@@ -24,12 +25,6 @@ interface UseMemos {
   handleSortIdDateChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handlePickDiffChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleMarkDivChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  pickMemos: (
-    sortIdDate: SortIdDate,
-    pickDateDiff: PickDateDiff,
-    pickMarkDiv: PickMarkDiv,
-    categories: string[],
-  ) => void;
   showMemosDel: () => void;
 }
 
@@ -37,8 +32,8 @@ export const useMemos = (): UseMemos => {
   const [sortIdDate, setSortIdDate] = useState<SortIdDate>('idAsc');
   const [pickDateDiff, setPickDateDiff] = useState<PickDateDiff>('all');
   const [pickMarkDiv, setPickMarkDiv] = useState<PickMarkDiv>('-1');
-  const [showMemos, setShowMemos] = useState<MemoData[]>([]);
   const [categories, setCategories] = useRecoilState<string[]>(categoriesState);
+  const pickCategories = useRecoilValue(pickCategoriesState);
   const { handle401 } = useLogin();
 
   const fetchMemos = async (): Promise<MemoData[]> => {
@@ -74,20 +69,15 @@ export const useMemos = (): UseMemos => {
     });
   }, []);
 
-  const handleSortIdDateChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>): void => {
-      const selectedSort = sortIdDateRadio.find((sort) => sort.value === event.target.value) ?? {
-        value: 'idAsc',
-        label: 'ID小さい順',
-      };
-      if (selectedSort !== null) {
-        setSortIdDate(selectedSort.value);
-        setShowMemos(sortMemos(memos ?? ([] as MemoData[]), selectedSort.value));
-      }
-    },
-    [memos, sortMemos],
-  );
-
+  const handleSortIdDateChange = useCallback((event: React.ChangeEvent<HTMLInputElement>): void => {
+    const selectedSort = sortIdDateRadio.find((sort) => sort.value === event.target.value) ?? {
+      value: 'idAsc',
+      label: 'ID小さい順',
+    };
+    if (selectedSort !== null) {
+      setSortIdDate(selectedSort.value);
+    }
+  }, []);
   const handlePickDiffChange = useCallback((event: React.ChangeEvent<HTMLInputElement>): void => {
     const selectedPick = pickDateDiffRadio.find((sort) => sort.value === event.target.value) ?? {
       value: 'all',
@@ -106,7 +96,6 @@ export const useMemos = (): UseMemos => {
       setPickMarkDiv(selectedPick.value);
     }
   }, []);
-
   const filterDateDiff = (date: string, pickDateDiff: PickDateDiff): boolean => {
     const { status } = diffFromNowYD(date);
     let result = true;
@@ -130,7 +119,12 @@ export const useMemos = (): UseMemos => {
   };
 
   const pickMemos = useCallback(
-    (sortIdDate: SortIdDate, pickDateDiff: PickDateDiff, pickMarkDiv: PickMarkDiv, pickCategories: string[]): void => {
+    (
+      sortIdDate: SortIdDate,
+      pickDateDiff: PickDateDiff,
+      pickMarkDiv: PickMarkDiv,
+      pickCategories: string[],
+    ): MemoData[] => {
       const pickedDateDiffMemos =
         pickDateDiff === 'all' ? memos : memos?.filter((memo) => filterDateDiff(memo.date, pickDateDiff));
       const pickedMarkDiv =
@@ -138,11 +132,13 @@ export const useMemos = (): UseMemos => {
           ? pickedDateDiffMemos
           : pickedDateDiffMemos?.filter((memo) => pickMarkDiv === memo.markDiv.toString());
       const pickedCat = pickedMarkDiv?.filter((memo) => pickCategories.includes(memo.category)) ?? [];
-      const sortedMemos = sortMemos(pickedCat ?? ([] as MemoData[]), sortIdDate) ?? ([] as MemoData[]);
-      setShowMemos(sortedMemos);
+      return sortMemos(pickedCat ?? ([] as MemoData[]), sortIdDate) ?? ([] as MemoData[]);
     },
     [memos, sortMemos],
   );
+  const showMemos = useMemo(() => {
+    return pickMemos(sortIdDate, pickDateDiff, pickMarkDiv, pickCategories);
+  }, [sortIdDate, pickDateDiff, pickMarkDiv, pickCategories, pickMemos]);
   const showMemosDel = useCallback(async () => {
     const delIds = showMemos.map((memo) => parseInt(memo.id, 10)).sort((a, b) => b - a);
 
@@ -198,7 +194,6 @@ export const useMemos = (): UseMemos => {
     handleSortIdDateChange,
     handlePickDiffChange,
     handleMarkDivChange,
-    pickMemos,
     showMemosDel,
   };
 };

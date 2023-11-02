@@ -1,5 +1,5 @@
 import type { MemoData } from '../../types';
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { useMemoSingle } from '../../hooks/useMemoSingle';
 import { useHandleModal } from '../../hooks/useHandleModal';
 import { jaDay } from '../../utils/date';
@@ -13,14 +13,8 @@ interface Props {
 }
 
 export const Memo: FC<Props> = ({ memo }) => {
-  const { isOpenDel, currentIdOpenDel, openDel, closeDel, delMemo, textFormatBr } = useMemoSingle();
+  const { currentIdOpenDel, openDel, closeDel, delMemo, textFormatBr } = useMemoSingle();
   const { openEdit } = useHandleModal();
-
-  useEffect(() => {
-    if (currentIdOpenDel !== memo.id) {
-      closeDel();
-    }
-  }, [currentIdOpenDel, memo, closeDel]);
 
   return (
     <FrostedGlass
@@ -59,7 +53,7 @@ export const Memo: FC<Props> = ({ memo }) => {
           編集
         </Button>
         <div>
-          {isOpenDel ? (
+          {currentIdOpenDel === memo.id ? (
             <div className="flex gap-x-4">
               <Button
                 type="button"

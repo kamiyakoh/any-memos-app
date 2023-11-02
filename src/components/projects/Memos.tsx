@@ -1,5 +1,5 @@
 import { FC, useEffect } from 'react';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { useHandleModal } from '../../hooks/useHandleModal';
 import { useMemos } from '../../hooks/useMemos';
 import { pickCategoriesState } from '../../states/pickCategoriesState';
@@ -10,7 +10,7 @@ import { Memo } from './Memo';
 
 export const Memos: FC = () => {
   const { openCategory } = useHandleModal();
-  const [pickCategories, setPickCatategories] = useRecoilState(pickCategoriesState);
+  const setPickCatategories = useSetRecoilState(pickCategoriesState);
   const {
     sortIdDate,
     pickDateDiff,
@@ -20,13 +20,9 @@ export const Memos: FC = () => {
     handleSortIdDateChange,
     handlePickDiffChange,
     handleMarkDivChange,
-    pickMemos,
     showMemosDel,
   } = useMemos();
 
-  useEffect(() => {
-    pickMemos(sortIdDate, pickDateDiff, pickMarkDiv, pickCategories);
-  }, [pickMemos, sortIdDate, pickDateDiff, pickMarkDiv, pickCategories]);
   useEffect(() => {
     setPickCatategories(categories);
   }, [setPickCatategories]); // eslint-disable-line react-hooks/exhaustive-deps

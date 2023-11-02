@@ -1,6 +1,6 @@
 import type { SetterOrUpdater } from 'recoil';
 import type { MemoData } from '../types';
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 import { useRecoilState } from 'recoil';
 import { useLogin } from './useLogin';
 import { useMemos } from './useMemos';
@@ -9,7 +9,6 @@ import { axiosInstance } from '../utils/axiosInstance';
 import toast from 'react-hot-toast';
 
 interface UseMemo {
-  isOpenDel: boolean;
   currentIdOpenDel: string;
   setCurrentIdOpenDel: SetterOrUpdater<string>;
   openDel: (id: string) => void;
@@ -19,20 +18,18 @@ interface UseMemo {
 }
 
 export const useMemoSingle = (): UseMemo => {
-  const [isOpenDel, setIsOpenDel] = useState<boolean>(false);
   const { handle401 } = useLogin();
   const { refetchMemos } = useMemos();
   const [currentIdOpenDel, setCurrentIdOpenDel] = useRecoilState(currentIdOpenDelState);
   const openDel = useCallback(
     (id: string): void => {
-      setIsOpenDel(true);
       setCurrentIdOpenDel(id);
     },
     [setCurrentIdOpenDel],
   );
   const closeDel = useCallback((): void => {
-    setIsOpenDel(false);
-  }, []);
+    setCurrentIdOpenDel('');
+  }, [setCurrentIdOpenDel]);
   const delMemo = useCallback(
     (id: string): void => {
       axiosInstance
@@ -71,5 +68,5 @@ export const useMemoSingle = (): UseMemo => {
     return escText.replace(/\n/g, '<br>');
   }, []);
 
-  return { isOpenDel, currentIdOpenDel, setCurrentIdOpenDel, openDel, closeDel, delMemo, textFormatBr };
+  return { currentIdOpenDel, setCurrentIdOpenDel, openDel, closeDel, delMemo, textFormatBr };
 };

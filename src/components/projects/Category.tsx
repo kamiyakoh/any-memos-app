@@ -4,14 +4,8 @@ import { useCategory } from '../../hooks/useCategory';
 
 export const Category: FC = () => {
   const { categories } = useMemos();
-  const {
-    selectAllChecked,
-    pickCategories,
-    selectAllCategories,
-    deselectAllCategories,
-    handlePickCategoryChange,
-    categoryLabel,
-  } = useCategory();
+  const { pickCategories, selectAllCategories, deselectAllCategories, handlePickCategoryChange, categoryLabel } =
+    useCategory();
 
   return (
     <div>
@@ -21,9 +15,9 @@ export const Category: FC = () => {
           <input
             type="checkbox"
             value="selectAll"
-            checked={selectAllChecked}
+            checked={pickCategories.length === categories.length}
             onChange={() => {
-              if (selectAllChecked) {
+              if (pickCategories.length === categories.length) {
                 deselectAllCategories();
               } else {
                 selectAllCategories();

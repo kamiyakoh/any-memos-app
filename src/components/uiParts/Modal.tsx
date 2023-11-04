@@ -21,7 +21,7 @@ export const Modal: FC<Props> = ({ isOpen, isLogin, borderColorClass, onClose, c
     <div className="fixed inset-0 z-50 flex items-center justify-center" onClick={handleBgClick}>
       <div className="fixed inset-0 bg-black opacity-50" onClick={onClose} />
       <div
-        className={`relative bg-white p-8 rounded-lg z-10 overflow-y-auto max-h-[90%] border-4 border-solid ${borderColorClass}`}
+        className={`relative text-black bg-white p-8 rounded-lg z-10 overflow-y-auto max-h-[90%] border-4 border-solid ${borderColorClass}`}
       >
         {isLogin || (
           <div className="absolute top-2 right-2">

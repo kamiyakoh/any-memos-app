@@ -1,15 +1,14 @@
 import { FC, useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
-import { useHandleModal } from '../../hooks/useHandleModal';
 import { useMemos } from '../../hooks/useMemos';
 import { pickCategoriesState } from '../../states/pickCategoriesState';
 import { sortIdDateRadio, pickDateDiffRadio, pickMarkDivRadio } from '../../utils/const';
 import { Button } from '../uiParts/Button';
 import { FrostedGlass } from '../uiParts/FrostedGlass';
+import { CategoryButton } from './CategoryButton';
 import { Memo } from './Memo';
 
 export const Memos: FC = () => {
-  const { openCategory } = useHandleModal();
   const setPickCatategories = useSetRecoilState(pickCategoriesState);
   const {
     sortIdDate,
@@ -73,14 +72,7 @@ export const Memos: FC = () => {
           ))}
         </div>
         <div className="flex flex-col items-start justify-between gap-y-6">
-          <Button
-            type="button"
-            className="self-center bg-yellow-500 hover:bg-yellow-600"
-            style={{ textShadow: '0.5px 0.5px 0 #000' }}
-            onClick={openCategory}
-          >
-            カテゴリー
-          </Button>
+          <CategoryButton />
           <Button
             type="button"
             className={`self-center  ${

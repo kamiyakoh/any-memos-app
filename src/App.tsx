@@ -1,6 +1,7 @@
 import { FC, useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { useApp } from './hooks/useApp';
+import { useCategoryButton } from './hooks/useCategoryButton';
 import { useHandleModal } from './hooks/useHandleModal';
 import { useLogin } from './hooks/useLogin';
 import { useMenu } from './hooks/useMenu';
@@ -17,7 +18,8 @@ worker.start(); // eslint-disable-line @typescript-eslint/no-floating-promises
 
 export const App: FC = () => {
   const { bgImg, bgFilter } = useApp();
-  const { isOpenCategory, edit, closeCategory, closeEditModal } = useHandleModal();
+  const { isOpenCategory, closeCategory } = useCategoryButton();
+  const { edit, closeEditModal } = useHandleModal();
   const { isAuth, isLoading, fetchIsAuth } = useLogin();
   const { isShowBgPreview, onClickCloseBgPreview } = useMenu();
 
@@ -45,11 +47,9 @@ export const App: FC = () => {
         </div>
         {isAuth && <Contents />}
       </div>
+      <Category />
       <Modal isOpen={edit.isOpenEdit} isLogin={false} borderColorClass="border-green-600" onClose={closeEditModal}>
         {edit.isOpenEdit && <Edit memo={edit.editMemo} closeModal={closeEditModal} />}
-      </Modal>
-      <Modal isOpen={isOpenCategory} isLogin={false} borderColorClass="border-yellow-500" onClose={closeCategory}>
-        {isOpenCategory && <Category />}
       </Modal>
       {!isLoading && (
         <Modal isOpen={!isAuth} borderColorClass="border-violet-500" isLogin={true}>

@@ -9,7 +9,7 @@ import { Modal } from './components/uiParts/Modal';
 import { FrostedGlass } from './components/uiParts/FrostedGlass';
 import { Login } from './components/projects/Login';
 import { Menu } from './components/projects/Menu';
-import { New } from './components/projects/New';
+import { NewButton } from './components/projects/NewButton';
 import { Category } from './components/projects/Category';
 import { Edit } from './components/projects/Edit';
 import { Contents } from './components/pages/Contents';
@@ -19,18 +19,8 @@ worker.start(); // eslint-disable-line @typescript-eslint/no-floating-promises
 
 export const App: FC = () => {
   const { bgImg, bgFilter } = useApp();
-  const {
-    isOpenMenu,
-    isOpenNew,
-    isOpenCategory,
-    edit,
-    openMenu,
-    openNew,
-    closeMenuModal,
-    closeNewModal,
-    closeCategory,
-    closeEditModal,
-  } = useHandleModal();
+  const { isOpenMenu, isOpenCategory, edit, openMenu, closeMenuModal, closeCategory, closeEditModal } =
+    useHandleModal();
   const { isAuth, isLoading, fetchIsAuth } = useLogin();
   const { isShowBgPreview, onClickCloseBgPreview } = useMenu();
 
@@ -52,16 +42,7 @@ export const App: FC = () => {
           </FrostedGlass>
         </button>
       )}
-      {isAuth && !isOpenNew && (
-        <button
-          className={`fixed top-4 left-4 z-50 text-4xl px-4 h-16 bg-blue-500 text-white rounded hover:bg-blue-600 min-[1936px]:left-[calc((100%_-_1920px)_/_2)]  ${
-            isShowBgPreview ? 'hidden' : ''
-          }`}
-          onClick={openNew}
-        >
-          作成
-        </button>
-      )}
+      {isAuth && !isShowBgPreview && <NewButton />}
       <div className="h-full min-h-screen relative bg-center bg-cover" style={{ backgroundImage: `url(${bgImg})` }}>
         <div
           className="absolute top-0 left-0 z-0 w-full h-full bg-gradient-to-b"
@@ -80,9 +61,7 @@ export const App: FC = () => {
       <Modal isOpen={isOpenCategory} isLogin={false} borderColorClass="border-yellow-500" onClose={closeCategory}>
         {isOpenCategory && <Category />}
       </Modal>
-      <Modal isOpen={isOpenNew} isLogin={false} borderColorClass="border-blue-500" onClose={closeNewModal}>
-        {isOpenNew && <New />}
-      </Modal>
+
       {!isShowBgPreview && (
         <Modal isOpen={isOpenMenu} isLogin={false} borderColorClass="border-gray-500" onClose={closeMenuModal}>
           {isOpenMenu && <Menu />}

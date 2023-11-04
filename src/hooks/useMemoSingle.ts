@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 import { useRecoilState } from 'recoil';
 import { useLogin } from './useLogin';
 import { useMemos } from './useMemos';
-import { currentIdOpenDelState } from '../states/openDelStatte';
+import { currentIdOpenDelState } from '../states/openDelState';
 import { axiosInstance } from '../utils/axiosInstance';
 import toast from 'react-hot-toast';
 

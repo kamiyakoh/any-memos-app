@@ -6,21 +6,18 @@ import { useLogin } from './hooks/useLogin';
 import { useMenu } from './hooks/useMenu';
 import { worker } from './serviceWorker';
 import { Modal } from './components/uiParts/Modal';
-import { FrostedGlass } from './components/uiParts/FrostedGlass';
 import { Login } from './components/projects/Login';
-import { Menu } from './components/projects/Menu';
 import { NewButton } from './components/projects/NewButton';
+import { MenuButton } from './components/projects/MenuButton';
 import { Category } from './components/projects/Category';
 import { Edit } from './components/projects/Edit';
 import { Contents } from './components/pages/Contents';
-import menuIcon from './assets/img/menuIcon.png';
 
 worker.start(); // eslint-disable-line @typescript-eslint/no-floating-promises
 
 export const App: FC = () => {
   const { bgImg, bgFilter } = useApp();
-  const { isOpenMenu, isOpenCategory, edit, openMenu, closeMenuModal, closeCategory, closeEditModal } =
-    useHandleModal();
+  const { isOpenCategory, edit, closeCategory, closeEditModal } = useHandleModal();
   const { isAuth, isLoading, fetchIsAuth } = useLogin();
   const { isShowBgPreview, onClickCloseBgPreview } = useMenu();
 
@@ -30,19 +27,12 @@ export const App: FC = () => {
 
   return (
     <div>
-      {isAuth && !isOpenMenu && (
-        <button
-          className={`fixed top-4 right-4 z-50 min-[1936px]:right-[calc((100%_-_1920px)_/_2)] ${
-            isShowBgPreview ? 'hidden' : ''
-          }`}
-          onClick={openMenu}
-        >
-          <FrostedGlass style={{ padding: '0.5rem' }}>
-            <img src={menuIcon} alt="menuIcon" />
-          </FrostedGlass>
-        </button>
+      {isAuth && !isShowBgPreview && (
+        <div>
+          <NewButton />
+          <MenuButton />
+        </div>
       )}
-      {isAuth && !isShowBgPreview && <NewButton />}
       <div className="h-full min-h-screen relative bg-center bg-cover" style={{ backgroundImage: `url(${bgImg})` }}>
         <div
           className="absolute top-0 left-0 z-0 w-full h-full bg-gradient-to-b"
@@ -61,12 +51,6 @@ export const App: FC = () => {
       <Modal isOpen={isOpenCategory} isLogin={false} borderColorClass="border-yellow-500" onClose={closeCategory}>
         {isOpenCategory && <Category />}
       </Modal>
-
-      {!isShowBgPreview && (
-        <Modal isOpen={isOpenMenu} isLogin={false} borderColorClass="border-gray-500" onClose={closeMenuModal}>
-          {isOpenMenu && <Menu />}
-        </Modal>
-      )}
       {!isLoading && (
         <Modal isOpen={!isAuth} borderColorClass="border-violet-500" isLogin={true}>
           {!isAuth && <Login />}

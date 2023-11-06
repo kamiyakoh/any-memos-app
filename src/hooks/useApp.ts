@@ -1,5 +1,5 @@
-import type { BgImg, MixBlendMode } from '../types';
-import { useEffect, useState, useMemo, useCallback } from 'react';
+import type { BgImg, BgFilter, MixBlendMode } from '../types';
+import { useMemo, useCallback } from 'react';
 import dayjs from 'dayjs';
 import { useMenu } from './useMenu';
 import bgSpring from '../assets/img/bgSpring.jpg';
@@ -7,19 +7,19 @@ import bgSummer from '../assets/img/bgSummer.jpg';
 import bgAutumn from '../assets/img/bgAutumn.jpg';
 import bgWinter from '../assets/img/bgWinter.jpg';
 
-interface BgFilter {
+interface BgBrend {
   colors: string[];
   mixBrendMode: MixBlendMode;
 }
 interface UseApp {
   bgImg: string;
-  bgFilter: BgFilter;
+  bgFilter: BgBrend;
 }
 interface BgFilters {
-  midnight: BgFilter;
-  morning: BgFilter;
-  afternoon: BgFilter;
-  evening: BgFilter;
+  midnight: BgBrend;
+  morning: BgBrend;
+  afternoon: BgBrend;
+  evening: BgBrend;
 }
 
 export const useApp = (): UseApp => {
@@ -34,7 +34,6 @@ export const useApp = (): UseApp => {
     [],
   );
 
-  const [bgImg, setBgImg] = useState<string>(bgSpring);
   const getBgImg = (month: number): string => {
     if (month >= 3 && month < 6) {
       return bgSpring;
@@ -46,12 +45,9 @@ export const useApp = (): UseApp => {
       return bgWinter;
     }
   };
-  const unfixedBgImg = useCallback((addMonth: number): void => {
+
+  const selectedBgImg = useCallback((bgImg: BgImg, addMonth: number): string => {
     const month = dayjs().add(addMonth, 'month').month() + 1;
-    const bg = getBgImg(month);
-    setBgImg(bg);
-  }, []);
-  const selectedBgImg = (bgImg: Omit<BgImg, 'unfixed'>): string => {
     let bgImage = '';
     switch (bgImg) {
       case 'spring':
@@ -63,17 +59,19 @@ export const useApp = (): UseApp => {
       case 'autumn':
         bgImage = bgAutumn;
         break;
-      default:
+      case 'winter':
         bgImage = bgWinter;
+        break;
+      default:
+        bgImage = getBgImg(month);
         break;
     }
 
     return bgImage;
-  };
+  }, []);
 
-  const [bgFilter, setBgFilter] = useState<BgFilter>(bgFilters.midnight);
   const getBgFilter = useCallback(
-    (hours: number): BgFilter => {
+    (hours: number): BgBrend => {
       if (hours >= 6 && hours < 12) {
         return bgFilters.morning;
       } else if (hours >= 12 && hours < 18) {
@@ -86,37 +84,22 @@ export const useApp = (): UseApp => {
     },
     [bgFilters],
   );
-  const unfixedBgFilter = useCallback(
-    (addHours: number): void => {
-      const hours = dayjs().add(addHours, 'hours').hour();
-      const newBgFilter = getBgFilter(hours);
-      setBgFilter(newBgFilter);
+  const selectedBgFilter = useCallback(
+    (menuOptionBgFilter: BgFilter, addHours: number): BgBrend => {
+      let filter;
+      if (menuOptionBgFilter === 'unfixed') {
+        const hours = dayjs().add(addHours, 'hours').hour();
+        filter = getBgFilter(hours);
+      } else {
+        filter = bgFilters[menuOptionBgFilter];
+      }
+      return filter;
     },
-    [getBgFilter],
+    [bgFilters, getBgFilter],
   );
 
-  useEffect(() => {
-    if (menuOption.bgImg === 'unfixed') {
-      unfixedBgImg(menuOption.addMonth);
-    } else {
-      setBgImg(selectedBgImg(menuOption.bgImg));
-    }
-
-    if (menuOption.bgFilter === 'unfixed') {
-      unfixedBgFilter(menuOption.addHours);
-    } else {
-      const filter = bgFilters[menuOption.bgFilter];
-      setBgFilter(filter);
-    }
-  }, [
-    bgFilters,
-    menuOption.bgFilter,
-    menuOption.bgImg,
-    menuOption.addHours,
-    menuOption.addMonth,
-    unfixedBgFilter,
-    unfixedBgImg,
-  ]);
+  const bgImg = selectedBgImg(menuOption.bgImg, menuOption.addMonth);
+  const bgFilter = selectedBgFilter(menuOption.bgFilter, menuOption.addHours);
 
   return { bgImg, bgFilter };
 };

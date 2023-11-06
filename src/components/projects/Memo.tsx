@@ -1,12 +1,12 @@
 import type { MemoData } from '../../types';
 import { FC } from 'react';
 import { useMemoSingle } from '../../hooks/useMemoSingle';
-import { useHandleModal } from '../../hooks/useHandleModal';
 import { jaDay } from '../../utils/date';
 import { Button } from '../uiParts/Button';
 import { FrostedGlass } from '../uiParts/FrostedGlass';
 import { DiffDays } from '../uiParts/DiffDays';
 import { WeekDayJa } from '../uiParts/WeekDayJa';
+import { EditButton } from '../uiParts/EditButton';
 
 interface Props {
   memo: MemoData;
@@ -14,7 +14,6 @@ interface Props {
 
 export const Memo: FC<Props> = ({ memo }) => {
   const { currentIdOpenDel, openDel, closeDel, delMemo, textFormatBr } = useMemoSingle();
-  const { openEdit } = useHandleModal();
 
   return (
     <FrostedGlass
@@ -43,15 +42,7 @@ export const Memo: FC<Props> = ({ memo }) => {
         )}
       </div>
       <div className="flex justify-between mt-4">
-        <Button
-          type="button"
-          className="bg-green-600 hover:bg-green-700"
-          onClick={() => {
-            openEdit(memo);
-          }}
-        >
-          編集
-        </Button>
+        <EditButton memo={memo} />
         <div>
           {currentIdOpenDel === memo.id ? (
             <div className="flex gap-x-4">

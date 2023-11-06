@@ -4,6 +4,7 @@ import { useMenu } from '../../hooks/useMenu';
 import { useContents } from '../../hooks/useContents';
 import { ScrollToTopButton } from '../uiParts/ScrollToTopButton';
 import { Memos } from '../projects/Memos';
+import { Category } from '../../components/projects/Category';
 
 export const Contents: FC = () => {
   const { contentsRef, isVisible, handleScroll, scrollToTop } = useContents();
@@ -47,6 +48,7 @@ export const Contents: FC = () => {
             }
           >
             <Memos />
+            <Category />
           </Suspense>
         </ErrorBoundary>
       </div>

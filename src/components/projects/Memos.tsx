@@ -1,15 +1,19 @@
 import { FC, useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
+import { useEditButton } from '../../hooks/useEditButton';
 import { useMemos } from '../../hooks/useMemos';
 import { pickCategoriesState } from '../../states/pickCategoriesState';
 import { sortIdDateRadio, pickDateDiffRadio, pickMarkDivRadio } from '../../utils/const';
 import { Button } from '../uiParts/Button';
 import { FrostedGlass } from '../uiParts/FrostedGlass';
+import { Modal } from '../uiParts/Modal';
 import { CategoryButton } from './CategoryButton';
 import { Memo } from './Memo';
+import { Edit } from './Edit';
 
 export const Memos: FC = () => {
   const setPickCatategories = useSetRecoilState(pickCategoriesState);
+  const { edit, closeEdit } = useEditButton();
   const {
     sortIdDate,
     pickDateDiff,
@@ -71,7 +75,7 @@ export const Memos: FC = () => {
             </label>
           ))}
         </div>
-        <div className="flex flex-col items-start justify-between gap-y-6">
+        <div className="flex flex-col items-center justify-between gap-y-6">
           <CategoryButton />
           <Button
             type="button"
@@ -89,6 +93,9 @@ export const Memos: FC = () => {
       <div className="flex flex-wrap w-full max-w-[1920px] gap-4 mx-auto">
         {showMemos?.map((memo) => <Memo key={memo.id} memo={memo} />)}
       </div>
+      <Modal isOpen={edit.isOpenEdit} isLogin={false} borderColorClass="border-green-600" onClose={closeEdit}>
+        <Edit memo={edit.editMemo} />
+      </Modal>
     </div>
   );
 };

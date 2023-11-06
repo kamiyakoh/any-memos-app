@@ -1,17 +1,18 @@
-import type { MemoData } from '../../types';
 import { FC } from 'react';
 import { useEdit } from '../../hooks/useEdit';
+import { useEditButton } from '../../hooks/useEditButton';
 import { Button } from '../uiParts/Button';
 import { DiffDays } from '../uiParts/DiffDays';
 import { WeekDayJa } from '../uiParts/WeekDayJa';
+import { MemoData } from '../../types';
 
 interface Props {
   memo: MemoData;
-  closeModal: () => void;
 }
 
-export const Edit: FC<Props> = ({ memo, closeModal }) => {
-  const { watchDate, register, handleSubmit, editMemo } = useEdit(memo, closeModal);
+export const Edit: FC<Props> = ({ memo }) => {
+  const { closeEdit } = useEditButton();
+  const { watchDate, register, handleSubmit, editMemo } = useEdit(memo, closeEdit);
 
   return (
     <div>

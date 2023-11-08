@@ -14,7 +14,7 @@ export const MenuButton: FC = () => {
     <div>
       {!isOpenMenu && (
         <button
-          className={`fixed top-4 right-4 z-50 min-[1936px]:right-[calc((100%_-_1920px)_/_2)]`}
+          className={`fixed top-4 right-4 z-40 min-[1936px]:right-[calc((100%_-_1920px)_/_2)]`}
           onClick={openMenu}
         >
           <FrostedGlass style={{ padding: '0.5rem' }}>

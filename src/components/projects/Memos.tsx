@@ -12,6 +12,8 @@ import { CategoryButton } from './CategoryButton';
 import { Category } from '../../components/projects/Category';
 import { Memo } from './Memo';
 import { Edit } from './Edit';
+import { NewButton } from './NewButton';
+import { MenuButton } from './MenuButton';
 
 export const Memos: FC = () => {
   const setPickCatategories = useSetRecoilState(pickCategoriesState);
@@ -35,6 +37,8 @@ export const Memos: FC = () => {
 
   return (
     <div className="w-full px-[5%] pb-[5.5rem] md:mt-[-4.5rem]">
+      <NewButton />
+      <MenuButton />
       <FrostedGlass className="flex flex-wrap justify-around gap-4 w-fit mx-auto mb-4 p-6">
         <div>
           {sortIdDateRadio.map((item) => (

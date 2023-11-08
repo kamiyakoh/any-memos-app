@@ -51,7 +51,7 @@ export const Contents: FC = () => {
         </ErrorBoundary>
       </div>
       <ScrollToTopButton
-        className={`fixed bottom-4 right-4 z-50 min-[1936px]:right-[calc((100%_-_1920px)_/_2)] ${
+        className={`fixed bottom-4 right-4 z-40 min-[1936px]:right-[calc((100%_-_1920px)_/_2)] ${
           isVisible ? 'block' : 'hidden'
         }`}
         onClick={scrollToTop}

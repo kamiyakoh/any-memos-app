@@ -10,7 +10,7 @@ export const NewButton: FC = () => {
     <div>
       {!isOpenNew && (
         <button
-          className={`fixed top-4 left-4 z-50 text-4xl px-4 h-16 bg-blue-500 text-white rounded hover:bg-blue-600 min-[1936px]:left-[calc((100%_-_1920px)_/_2)]`}
+          className={`fixed top-4 left-4 z-40 text-4xl px-4 h-16 bg-blue-500 text-white rounded hover:bg-blue-600 min-[1936px]:left-[calc((100%_-_1920px)_/_2)]`}
           onClick={openNew}
         >
           作成

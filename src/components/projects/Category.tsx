@@ -1,14 +1,17 @@
 import { FC } from 'react';
 import { useMemos } from '../../hooks/useMemos';
 import { useCategory } from '../../hooks/useCategory';
-import { useCategoryButton } from '../../hooks/useCategoryButton';
 import { Modal } from '../uiParts/Modal';
 
-export const Category: FC = () => {
+interface Props {
+  isOpenCategory: boolean;
+  closeCategory: () => void;
+}
+
+export const Category: FC<Props> = ({ isOpenCategory, closeCategory }) => {
   const { categories } = useMemos();
   const { pickCategories, selectAllCategories, deselectAllCategories, handlePickCategoryChange, categoryLabel } =
     useCategory();
-  const { isOpenCategory, closeCategory } = useCategoryButton();
 
   if (!isOpenCategory) return null;
   return (

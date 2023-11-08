@@ -1,10 +1,11 @@
 import { FC } from 'react';
-import { useCategoryButton } from '../../hooks/useCategoryButton';
 import { Button } from '../uiParts/Button';
 
-export const CategoryButton: FC = () => {
-  const { openCategory } = useCategoryButton();
+interface Props {
+  openCategory: () => void;
+}
 
+export const CategoryButton: FC<Props> = ({ openCategory }) => {
   return (
     <div>
       <Button

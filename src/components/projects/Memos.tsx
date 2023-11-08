@@ -1,5 +1,6 @@
 import { FC, useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
+import { useCategoryButton } from '../../hooks/useCategoryButton';
 import { useEditButton } from '../../hooks/useEditButton';
 import { useMemos } from '../../hooks/useMemos';
 import { pickCategoriesState } from '../../states/pickCategoriesState';
@@ -8,11 +9,13 @@ import { Button } from '../uiParts/Button';
 import { FrostedGlass } from '../uiParts/FrostedGlass';
 import { Modal } from '../uiParts/Modal';
 import { CategoryButton } from './CategoryButton';
+import { Category } from '../../components/projects/Category';
 import { Memo } from './Memo';
 import { Edit } from './Edit';
 
 export const Memos: FC = () => {
   const setPickCatategories = useSetRecoilState(pickCategoriesState);
+  const { isOpenCategory, openCategory, closeCategory } = useCategoryButton();
   const { edit, closeEdit } = useEditButton();
   const {
     sortIdDate,
@@ -76,7 +79,7 @@ export const Memos: FC = () => {
           ))}
         </div>
         <div className="flex flex-col items-center justify-between gap-y-6">
-          <CategoryButton />
+          <CategoryButton openCategory={openCategory} />
           <Button
             type="button"
             className={`self-center  ${
@@ -93,6 +96,7 @@ export const Memos: FC = () => {
       <div className="flex flex-wrap w-full max-w-[1920px] gap-4 mx-auto">
         {showMemos?.map((memo) => <Memo key={memo.id} memo={memo} />)}
       </div>
+      <Category isOpenCategory={isOpenCategory} closeCategory={closeCategory} />
       <Modal isOpen={edit.isOpenEdit} isLogin={false} borderColorClass="border-green-600" onClose={closeEdit}>
         <Edit memo={edit.editMemo} />
       </Modal>

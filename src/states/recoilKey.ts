@@ -1,6 +1,5 @@
 export const recoilKey = {
   isAuthState: 'IS_AUTH_STATE',
-  isOpenCategoryState: 'IS_OPEN_CATEGORY_STATE',
   isShowBgPreviewState: 'IS_SHOW_BG_PREVIEW_STATE',
   editState: 'EDIT_STATE',
   currentIdOpenDelState: 'CURRENT_ID_OPEN_DEL_STATE',

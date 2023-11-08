@@ -1,5 +1,4 @@
-import { useRecoilState } from 'recoil';
-import { isOpenCategoryState } from '../states/isOpenCategoryState';
+import { useState } from 'react';
 
 interface UseCategoryButton {
   isOpenCategory: boolean;
@@ -8,7 +7,7 @@ interface UseCategoryButton {
 }
 
 export const useCategoryButton = (): UseCategoryButton => {
-  const [isOpenCategory, setIsOpenCategory] = useRecoilState<boolean>(isOpenCategoryState);
+  const [isOpenCategory, setIsOpenCategory] = useState<boolean>(false);
 
   const openCategory = (): void => {
     setIsOpenCategory(true);

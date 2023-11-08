@@ -1,15 +1,13 @@
 import type { MemoData } from '../../types';
 import { FC } from 'react';
-import { useEditButton } from '../../hooks/useEditButton';
 import { Button } from '../uiParts/Button';
 
 interface Props {
   memo: MemoData;
+  openEdit: (memo: MemoData) => void;
 }
 
-export const EditButton: FC<Props> = ({ memo }) => {
-  const { openEdit } = useEditButton();
-
+export const EditButton: FC<Props> = ({ memo, openEdit }) => {
   return (
     <Button
       type="button"

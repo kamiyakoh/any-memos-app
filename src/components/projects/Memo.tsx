@@ -10,9 +10,10 @@ import { EditButton } from './EditButton';
 
 interface Props {
   memo: MemoData;
+  openEdit: (memo: MemoData) => void;
 }
 
-export const Memo: FC<Props> = ({ memo }) => {
+export const Memo: FC<Props> = ({ memo, openEdit }) => {
   const { currentIdOpenDel, openDel, closeDel, delMemo, textFormatBr } = useMemoSingle();
 
   return (
@@ -42,7 +43,7 @@ export const Memo: FC<Props> = ({ memo }) => {
         )}
       </div>
       <div className="flex justify-between mt-4">
-        <EditButton memo={memo} />
+        <EditButton memo={memo} openEdit={openEdit} />
         <div>
           {currentIdOpenDel === memo.id ? (
             <div className="flex gap-x-4">

@@ -16,7 +16,7 @@ import { Edit } from './Edit';
 export const Memos: FC = () => {
   const setPickCatategories = useSetRecoilState(pickCategoriesState);
   const { isOpenCategory, openCategory, closeCategory } = useCategoryButton();
-  const { edit, closeEdit } = useEditButton();
+  const { edit, openEdit, closeEdit } = useEditButton();
   const {
     sortIdDate,
     pickDateDiff,
@@ -94,11 +94,11 @@ export const Memos: FC = () => {
         </div>
       </FrostedGlass>
       <div className="flex flex-wrap w-full max-w-[1920px] gap-4 mx-auto">
-        {showMemos?.map((memo) => <Memo key={memo.id} memo={memo} />)}
+        {showMemos?.map((memo) => <Memo key={memo.id} memo={memo} openEdit={openEdit} />)}
       </div>
       <Category isOpenCategory={isOpenCategory} closeCategory={closeCategory} />
       <Modal isOpen={edit.isOpenEdit} isLogin={false} borderColorClass="border-green-600" onClose={closeEdit}>
-        <Edit memo={edit.editMemo} />
+        <Edit memo={edit.editMemo} closeEdit={closeEdit} />
       </Modal>
     </div>
   );

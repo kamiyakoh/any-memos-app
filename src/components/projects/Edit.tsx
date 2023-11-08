@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useEdit } from '../../hooks/useEdit';
 import { useEditButton } from '../../hooks/useEditButton';
 import { Button } from '../uiParts/Button';
-import { DiffDays } from '../uiParts/DiffDays';
+import { DiffDays } from './DiffDays';
 import { WeekDayJa } from '../uiParts/WeekDayJa';
 import { MemoData } from '../../types';
 

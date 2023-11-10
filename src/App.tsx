@@ -33,9 +33,9 @@ export const App: FC = () => {
         </div>
         {isAuth && <Contents />}
       </div>
-      {!isLoading && (
-        <Modal isOpen={!isAuth} borderColorClass="border-violet-500" isLogin={true}>
-          {!isAuth && <Login />}
+      {!isLoading && !isAuth && (
+        <Modal selectedModal="login">
+          <Login />
         </Modal>
       )}
       <Toaster

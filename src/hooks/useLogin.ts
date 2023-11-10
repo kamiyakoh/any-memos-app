@@ -4,8 +4,7 @@ import { useState, useCallback } from 'react';
 import { useRecoilState } from 'recoil';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { useNewButton } from './useNewButton';
-import { useEditButton } from './useEditButton';
+import { useModal } from './useModal';
 import { isAuthState } from '../states/isAuthState';
 import { login } from '../mocks/auth';
 
@@ -27,8 +26,7 @@ interface UseLogin {
 export const useLogin = (): UseLogin => {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuth, setIsAuth] = useRecoilState<boolean>(isAuthState);
-  const { closeNew } = useNewButton();
-  const { closeEdit } = useEditButton();
+  const { closeModal } = useModal();
   const { register, handleSubmit } = useForm<InputLogin>({
     defaultValues: {
       email: '',
@@ -76,11 +74,10 @@ export const useLogin = (): UseLogin => {
   const handle401 = useCallback((): void => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('accessTokenExp');
-    closeNew();
-    closeEdit();
+    closeModal();
     toast.error('権限がありません\n再ログインしてください');
     setIsAuth(false);
-  }, [closeNew, closeEdit, setIsAuth]);
+  }, [closeModal, setIsAuth]);
 
   return { isAuth, isLoading, setIsAuth, register, handleSubmit, fetchIsAuth, handleLogin, handle401 };
 };

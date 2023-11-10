@@ -1,21 +1,14 @@
 import { FC } from 'react';
 import { useMemos } from '../../hooks/useMemos';
 import { useCategory } from '../../hooks/useCategory';
-import { Modal } from '../uiParts/Modal';
 
-interface Props {
-  isOpenCategory: boolean;
-  closeCategory: () => void;
-}
-
-export const Category: FC<Props> = ({ isOpenCategory, closeCategory }) => {
+export const Category: FC = () => {
   const { categories } = useMemos();
   const { pickCategories, selectAllCategories, deselectAllCategories, handlePickCategoryChange, categoryLabel } =
     useCategory();
 
-  if (!isOpenCategory) return null;
   return (
-    <Modal isOpen={isOpenCategory} isLogin={false} borderColorClass="border-yellow-500" onClose={closeCategory}>
+    <div>
       <div className="flex justify-center gap-8">
         <h2 className="font-bold">カテゴリー</h2>
         <label>
@@ -47,6 +40,6 @@ export const Category: FC<Props> = ({ isOpenCategory, closeCategory }) => {
           </label>
         ))}
       </div>
-    </Modal>
+    </div>
   );
 };

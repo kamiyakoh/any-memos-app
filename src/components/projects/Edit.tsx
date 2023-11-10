@@ -7,11 +7,11 @@ import { WeekDayJa } from '../uiParts/WeekDayJa';
 
 interface Props {
   memo: MemoData;
-  closeEdit: () => void;
+  closeModal: () => void;
 }
 
-export const Edit: FC<Props> = ({ memo, closeEdit }) => {
-  const { watchDate, register, handleSubmit, editMemo } = useEdit(memo, closeEdit);
+export const Edit: FC<Props> = ({ memo, closeModal }) => {
+  const { watchDate, register, handleSubmit, editMemo } = useEdit(memo, closeModal);
 
   return (
     <div>

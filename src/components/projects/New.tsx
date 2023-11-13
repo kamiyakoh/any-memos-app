@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useNew } from '../../hooks/useNew';
 import { Button } from '../uiParts/Button';
-import { DiffDays } from '../uiParts/DiffDays';
+import { DiffDays } from './DiffDays';
 import { WeekDayJa } from '../uiParts/WeekDayJa';
 
 export const New: FC = () => {

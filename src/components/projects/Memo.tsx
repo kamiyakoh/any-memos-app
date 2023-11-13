@@ -4,9 +4,9 @@ import { useMemoSingle } from '../../hooks/useMemoSingle';
 import { jaDay } from '../../utils/date';
 import { Button } from '../uiParts/Button';
 import { FrostedGlass } from '../uiParts/FrostedGlass';
-import { DiffDays } from '../uiParts/DiffDays';
+import { DiffDays } from './DiffDays';
 import { WeekDayJa } from '../uiParts/WeekDayJa';
-import { EditButton } from '../uiParts/EditButton';
+import { EditButton } from './EditButton';
 
 interface Props {
   memo: MemoData;

@@ -1,17 +1,20 @@
 import type { MemoData } from '../../types';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { useMemoSingle } from '../../hooks/useMemoSingle';
 import { jaDay } from '../../utils/date';
 import { Button } from '../uiParts/Button';
 import { FrostedGlass } from '../uiParts/FrostedGlass';
 import { DiffDays } from './DiffDays';
 import { WeekDayJa } from '../uiParts/WeekDayJa';
+import { Modal } from '../uiParts/Modal';
+import { Edit } from './Edit';
 
 interface Props {
   memo: MemoData;
 }
 
 export const Memo: FC<Props> = ({ memo }) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const { currentIdOpenDel, openDel, closeDel, delMemo, textFormatBr } = useMemoSingle();
 
   return (
@@ -41,7 +44,13 @@ export const Memo: FC<Props> = ({ memo }) => {
         )}
       </div>
       <div className="flex justify-between mt-4">
-        <Button type="button" className="bg-green-600 hover:bg-green-700">
+        <Button
+          type="button"
+          className="bg-green-600 hover:bg-green-700"
+          onClick={() => {
+            setIsOpen(true);
+          }}
+        >
           編集
         </Button>
         <div>
@@ -73,6 +82,22 @@ export const Memo: FC<Props> = ({ memo }) => {
           )}
         </div>
       </div>
+      <Modal
+        borderClass="border-green-600"
+        isOpen={isOpen}
+        closeButton
+        closeOnBgClick
+        onClose={() => {
+          setIsOpen(false);
+        }}
+      >
+        <Edit
+          memo={memo}
+          closeModal={() => {
+            setIsOpen(false);
+          }}
+        />
+      </Modal>
     </FrostedGlass>
   );
 };

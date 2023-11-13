@@ -33,8 +33,8 @@ export const App: FC = () => {
         </div>
         {isAuth && <Contents />}
       </div>
-      {!isLoading && !isAuth && (
-        <Modal selectedModal="login">
+      {!isLoading && (
+        <Modal borderClass="border-violet-500" isOpen={!isAuth}>
           <Login />
         </Modal>
       )}

@@ -1,6 +1,5 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
-import { useModal } from '../../hooks/useModal';
 import { useMemos } from '../../hooks/useMemos';
 import { pickCategoriesState } from '../../states/pickCategoriesState';
 import { sortIdDateRadio, pickDateDiffRadio, pickMarkDivRadio } from '../../utils/const';
@@ -11,12 +10,14 @@ import { Memo } from './Memo';
 import { Menu } from './Menu';
 import { Category } from '../../components/projects/Category';
 import { New } from './New';
-import { Edit } from './Edit';
+// import { Edit } from './Edit';
 import menuIcon from '../../assets/img/menuIcon.png';
 
 export const Memos: FC = () => {
+  const [isOpenCategory, setIsOpenCategory] = useState<boolean>(false);
+  const [isOpenNew, setIsOpenNew] = useState<boolean>(false);
+  const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
   const setPickCatategories = useSetRecoilState(pickCategoriesState);
-  const { selectedModal, selectedMemo, openModal, closeModal } = useModal();
   const {
     sortIdDate,
     pickDateDiff,
@@ -38,7 +39,7 @@ export const Memos: FC = () => {
       <button
         className={`fixed top-4 left-4 z-40 text-4xl px-4 h-16 bg-blue-500 text-white rounded hover:bg-blue-600 min-[1936px]:left-[calc((100%_-_1920px)_/_2)]`}
         onClick={() => {
-          openModal('new');
+          setIsOpenNew(true);
         }}
       >
         作成
@@ -46,7 +47,7 @@ export const Memos: FC = () => {
       <button
         className={`fixed top-4 right-4 z-40 min-[1936px]:right-[calc((100%_-_1920px)_/_2)]`}
         onClick={() => {
-          openModal('menu');
+          setIsOpenMenu(true);
         }}
       >
         <FrostedGlass style={{ padding: '0.5rem' }}>
@@ -102,7 +103,7 @@ export const Memos: FC = () => {
             className="self-center bg-yellow-500 hover:bg-yellow-600"
             style={{ textShadow: '0.5px 0.5px 0 #000' }}
             onClick={() => {
-              openModal('category');
+              setIsOpenCategory(true);
             }}
           >
             カテゴリー
@@ -121,13 +122,40 @@ export const Memos: FC = () => {
         </div>
       </FrostedGlass>
       <div className="flex flex-wrap w-full max-w-[1920px] gap-4 mx-auto">
-        {showMemos?.map((memo) => <Memo key={memo.id} memo={memo} openModal={openModal} />)}
+        {showMemos?.map((memo) => <Memo key={memo.id} memo={memo} />)}
       </div>
-      <Modal selectedModal={selectedModal} onClose={closeModal}>
-        {selectedModal === 'menu' && <Menu />}
-        {selectedModal === 'category' && <Category />}
-        {selectedModal === 'new' && <New />}
-        {selectedModal === 'edit' && <Edit memo={selectedMemo} closeModal={closeModal} />}
+      <Modal
+        borderClass="border-gray-500"
+        isOpen={isOpenMenu}
+        closeButton
+        closeOnBgClick
+        onClose={() => {
+          setIsOpenMenu(false);
+        }}
+      >
+        <Menu />
+      </Modal>
+      <Modal
+        borderClass="border-yellow-500"
+        isOpen={isOpenCategory}
+        closeButton
+        closeOnBgClick
+        onClose={() => {
+          setIsOpenCategory(false);
+        }}
+      >
+        <Category />
+      </Modal>
+      <Modal
+        borderClass="border-blue-500"
+        isOpen={isOpenNew}
+        closeButton
+        closeOnBgClick
+        onClose={() => {
+          setIsOpenNew(false);
+        }}
+      >
+        <New />
       </Modal>
     </div>
   );

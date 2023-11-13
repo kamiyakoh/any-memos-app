@@ -1,4 +1,4 @@
-import type { ModalName, MemoData } from '../../types';
+import type { MemoData } from '../../types';
 import { FC } from 'react';
 import { useMemoSingle } from '../../hooks/useMemoSingle';
 import { jaDay } from '../../utils/date';
@@ -9,10 +9,9 @@ import { WeekDayJa } from '../uiParts/WeekDayJa';
 
 interface Props {
   memo: MemoData;
-  openModal: (selectedModal: ModalName, memo?: MemoData) => void;
 }
 
-export const Memo: FC<Props> = ({ memo, openModal }) => {
+export const Memo: FC<Props> = ({ memo }) => {
   const { currentIdOpenDel, openDel, closeDel, delMemo, textFormatBr } = useMemoSingle();
 
   return (
@@ -42,13 +41,7 @@ export const Memo: FC<Props> = ({ memo, openModal }) => {
         )}
       </div>
       <div className="flex justify-between mt-4">
-        <Button
-          type="button"
-          className="bg-green-600 hover:bg-green-700"
-          onClick={() => {
-            openModal('edit', memo);
-          }}
-        >
+        <Button type="button" className="bg-green-600 hover:bg-green-700">
           編集
         </Button>
         <div>

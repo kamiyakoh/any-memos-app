@@ -21,7 +21,6 @@ export type BgFilter = 'unfixed' | 'midnight' | 'morning' | 'afternoon' | 'eveni
 export type SortIdDate = 'idAsc' | 'idDesc' | 'dateAsc' | 'dateDesc';
 export type PickDateDiff = 'all' | 'rest' | 'over';
 export type PickMarkDiv = '-1' | '0' | '1';
-export type ModalName = '' | 'login' | 'menu' | 'category' | 'new' | 'edit';
 
 export interface AccessToken {
   accessToken: string;

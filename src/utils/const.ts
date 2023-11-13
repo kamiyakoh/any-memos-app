@@ -1,4 +1,4 @@
-import type { BgImg, BgFilter, SortIdDate, PickDateDiff, PickMarkDiv, ModalName } from '../types';
+import type { BgImg, BgFilter, SortIdDate, PickDateDiff, PickMarkDiv } from '../types';
 
 interface BgImgOptions {
   value: BgImg;
@@ -19,10 +19,6 @@ interface PickDateDiffRadio {
 interface PickMarkDivRadio {
   value: PickMarkDiv;
   label: string;
-}
-interface Modal {
-  name: ModalName;
-  borderClass: string;
 }
 
 export const bgImgOptions: BgImgOptions[] = [
@@ -54,11 +50,4 @@ export const pickMarkDivRadio: PickMarkDivRadio[] = [
   { value: '-1', label: '全て' },
   { value: '1', label: '★あり' },
   { value: '0', label: '-なし' },
-];
-export const modals: Modal[] = [
-  { name: 'login', borderClass: 'border-violet-500' },
-  { name: 'menu', borderClass: 'border-gray-500' },
-  { name: 'category', borderClass: 'border-yellow-500' },
-  { name: 'new', borderClass: 'border-blue-500' },
-  { name: 'edit', borderClass: 'border-green-600' },
 ];

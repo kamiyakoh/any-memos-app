@@ -44,15 +44,19 @@ export const Memo: FC<Props> = ({ memo }) => {
         )}
       </div>
       <div className="flex justify-between mt-4">
-        <Button
-          type="button"
-          className="bg-green-600 hover:bg-green-700"
-          onClick={() => {
-            setIsOpen(true);
-          }}
-        >
-          編集
-        </Button>
+        {isOpen ? (
+          <div />
+        ) : (
+          <Button
+            type="button"
+            className="bg-green-600 hover:bg-green-700"
+            onClick={() => {
+              setIsOpen(true);
+            }}
+          >
+            編集
+          </Button>
+        )}
         <div>
           {currentIdOpenDel === memo.id ? (
             <div className="flex gap-x-4">
@@ -83,10 +87,9 @@ export const Memo: FC<Props> = ({ memo }) => {
         </div>
       </div>
       <Modal
-        borderClass="border-green-600"
+        addClassPanel="border-green-600 w-full"
         isOpen={isOpen}
         closeButton
-        closeOnBgClick
         onClose={() => {
           setIsOpen(false);
         }}

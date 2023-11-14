@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { useMemos } from '../../hooks/useMemos';
+import { useMenu } from '../../hooks/useMenu';
 import { pickCategoriesState } from '../../states/pickCategoriesState';
 import { sortIdDateRadio, pickDateDiffRadio, pickMarkDivRadio } from '../../utils/const';
 import { Button } from '../uiParts/Button';
@@ -10,7 +11,6 @@ import { Memo } from './Memo';
 import { Menu } from './Menu';
 import { Category } from '../../components/projects/Category';
 import { New } from './New';
-// import { Edit } from './Edit';
 import menuIcon from '../../assets/img/menuIcon.png';
 
 export const Memos: FC = () => {
@@ -18,6 +18,7 @@ export const Memos: FC = () => {
   const [isOpenNew, setIsOpenNew] = useState<boolean>(false);
   const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
   const setPickCatategories = useSetRecoilState(pickCategoriesState);
+  const { isShowBgPreview } = useMenu();
   const {
     sortIdDate,
     pickDateDiff,
@@ -36,24 +37,28 @@ export const Memos: FC = () => {
 
   return (
     <div className="w-full px-[5%] pb-[5.5rem] md:mt-[-4.5rem]">
-      <button
-        className={`fixed top-4 left-4 z-40 text-4xl px-4 h-16 bg-blue-500 text-white rounded hover:bg-blue-600 min-[1936px]:left-[calc((100%_-_1920px)_/_2)]`}
-        onClick={() => {
-          setIsOpenNew(true);
-        }}
-      >
-        作成
-      </button>
-      <button
-        className={`fixed top-4 right-4 z-40 min-[1936px]:right-[calc((100%_-_1920px)_/_2)]`}
-        onClick={() => {
-          setIsOpenMenu(true);
-        }}
-      >
-        <FrostedGlass style={{ padding: '0.5rem' }}>
-          <img src={menuIcon} alt="menuIcon" />
-        </FrostedGlass>
-      </button>
+      {isOpenNew || (
+        <button
+          className={`fixed top-4 left-4 z-40 text-4xl px-4 h-16 bg-blue-500 text-white rounded hover:bg-blue-600 min-[1936px]:left-[calc((100%_-_1920px)_/_2)]`}
+          onClick={() => {
+            setIsOpenNew(true);
+          }}
+        >
+          作成
+        </button>
+      )}
+      {isOpenMenu || (
+        <button
+          className={`fixed top-4 right-4 z-40 min-[1936px]:right-[calc((100%_-_1920px)_/_2)]`}
+          onClick={() => {
+            setIsOpenMenu(true);
+          }}
+        >
+          <FrostedGlass style={{ padding: '0.5rem' }}>
+            <img src={menuIcon} alt="menuIcon" />
+          </FrostedGlass>
+        </button>
+      )}
       <FrostedGlass className="flex flex-wrap justify-around gap-4 w-fit mx-auto mb-4 p-6">
         <div>
           {sortIdDateRadio.map((item) => (
@@ -98,16 +103,20 @@ export const Memos: FC = () => {
           ))}
         </div>
         <div className="flex flex-col items-center justify-between gap-y-6">
-          <Button
-            type="button"
-            className="self-center bg-yellow-500 hover:bg-yellow-600"
-            style={{ textShadow: '0.5px 0.5px 0 #000' }}
-            onClick={() => {
-              setIsOpenCategory(true);
-            }}
-          >
-            カテゴリー
-          </Button>
+          {isOpenCategory ? (
+            <div />
+          ) : (
+            <Button
+              type="button"
+              className="self-center bg-yellow-500 hover:bg-yellow-600"
+              style={{ textShadow: '0.5px 0.5px 0 #000' }}
+              onClick={() => {
+                setIsOpenCategory(true);
+              }}
+            >
+              カテゴリー
+            </Button>
+          )}
           <Button
             type="button"
             className={`self-center  ${
@@ -124,22 +133,22 @@ export const Memos: FC = () => {
       <div className="flex flex-wrap w-full max-w-[1920px] gap-4 mx-auto">
         {showMemos?.map((memo) => <Memo key={memo.id} memo={memo} />)}
       </div>
+      {isShowBgPreview || (
+        <Modal
+          addClassPanel="border-gray-500"
+          isOpen={isOpenMenu}
+          closeButton
+          onClose={() => {
+            setIsOpenMenu(false);
+          }}
+        >
+          <Menu />
+        </Modal>
+      )}
       <Modal
-        borderClass="border-gray-500"
-        isOpen={isOpenMenu}
-        closeButton
-        closeOnBgClick
-        onClose={() => {
-          setIsOpenMenu(false);
-        }}
-      >
-        <Menu />
-      </Modal>
-      <Modal
-        borderClass="border-yellow-500"
+        addClassPanel="border-yellow-500"
         isOpen={isOpenCategory}
         closeButton
-        closeOnBgClick
         onClose={() => {
           setIsOpenCategory(false);
         }}
@@ -147,10 +156,9 @@ export const Memos: FC = () => {
         <Category />
       </Modal>
       <Modal
-        borderClass="border-blue-500"
+        addClassPanel="border-blue-500 w-full"
         isOpen={isOpenNew}
         closeButton
-        closeOnBgClick
         onClose={() => {
           setIsOpenNew(false);
         }}

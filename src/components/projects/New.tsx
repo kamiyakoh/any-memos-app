@@ -9,7 +9,7 @@ export const New: FC = () => {
 
   return (
     <div>
-      <form className="w-[80vw] max-w-screen-2xl" onSubmit={handleSubmit(postMemo)}>
+      <form onSubmit={handleSubmit(postMemo)}>
         <label htmlFor="title">
           タイトル
           <br />

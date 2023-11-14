@@ -15,7 +15,7 @@ export const Edit: FC<Props> = ({ memo, closeModal }) => {
 
   return (
     <div>
-      <form className="w-[80vw] max-w-screen-2xl" onSubmit={handleSubmit(editMemo)}>
+      <form onSubmit={handleSubmit(editMemo)}>
         <label htmlFor="title">
           ID： {memo.id}
           <br />

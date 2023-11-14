@@ -34,7 +34,13 @@ export const App: FC = () => {
         {isAuth && <Contents />}
       </div>
       {!isLoading && (
-        <Modal borderClass="border-violet-500" isOpen={!isAuth}>
+        <Modal
+          addClassPanel="border-violet-500"
+          isOpen={!isAuth}
+          onClose={() => {
+            console.log('required login');
+          }}
+        >
           <Login />
         </Modal>
       )}

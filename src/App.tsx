@@ -37,6 +37,7 @@ export const App: FC = () => {
         <Modal
           addClassPanel="border-violet-500"
           isOpen={!isAuth}
+          enableCloseButton={false}
           onClose={() => {
             console.log('required login');
           }}

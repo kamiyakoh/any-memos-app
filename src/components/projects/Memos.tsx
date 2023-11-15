@@ -137,7 +137,7 @@ export const Memos: FC = () => {
         <Modal
           addClassPanel="border-gray-500"
           isOpen={isOpenMenu}
-          closeButton
+          enableCloseButton
           onClose={() => {
             setIsOpenMenu(false);
           }}
@@ -148,7 +148,7 @@ export const Memos: FC = () => {
       <Modal
         addClassPanel="border-yellow-500"
         isOpen={isOpenCategory}
-        closeButton
+        enableCloseButton
         onClose={() => {
           setIsOpenCategory(false);
         }}
@@ -158,7 +158,7 @@ export const Memos: FC = () => {
       <Modal
         addClassPanel="border-blue-500 w-full"
         isOpen={isOpenNew}
-        closeButton
+        enableCloseButton
         onClose={() => {
           setIsOpenNew(false);
         }}

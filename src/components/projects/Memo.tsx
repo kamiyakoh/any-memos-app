@@ -89,7 +89,7 @@ export const Memo: FC<Props> = ({ memo }) => {
       <Modal
         addClassPanel="border-green-600 w-full"
         isOpen={isOpen}
-        closeButton
+        enableCloseButton
         onClose={() => {
           setIsOpen(false);
         }}

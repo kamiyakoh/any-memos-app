@@ -14,12 +14,14 @@ import { diffFromNowYD } from '../utils/date';
 import { sortIdDateRadio, pickDateDiffRadio, pickMarkDivRadio } from '../utils/const';
 
 interface UseMemos {
+  currentIdOpenDel: string;
   sortIdDate: SortIdDate;
   pickDateDiff: PickDateDiff;
   pickMarkDiv: PickMarkDiv;
   memos?: MemoData[];
   showMemos?: MemoData[];
   categories: string[];
+  setCurrentIdOpenDel: React.Dispatch<React.SetStateAction<string>>;
   fetchMemos: () => Promise<MemoData[]>;
   refetchMemos: () => Promise<QueryObserverResult<MemoData[], unknown>>;
   handleSortIdDateChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -29,6 +31,7 @@ interface UseMemos {
 }
 
 export const useMemos = (): UseMemos => {
+  const [currentIdOpenDel, setCurrentIdOpenDel] = useState<string>('');
   const [sortIdDate, setSortIdDate] = useState<SortIdDate>('idAsc');
   const [pickDateDiff, setPickDateDiff] = useState<PickDateDiff>('all');
   const [pickMarkDiv, setPickMarkDiv] = useState<PickMarkDiv>('-1');
@@ -172,6 +175,7 @@ export const useMemos = (): UseMemos => {
             ${error > 0 ? error.toString() + '件のメモが削除できませんでした' : ''}`);
 
           await refetchMemos();
+          setCurrentIdOpenDel('');
         }
         if (res.status === 401) {
           handle401();
@@ -183,12 +187,14 @@ export const useMemos = (): UseMemos => {
   }, [showMemos, handle401, refetchMemos]);
 
   return {
+    currentIdOpenDel,
     sortIdDate,
     pickDateDiff,
     pickMarkDiv,
     memos,
     showMemos,
     categories,
+    setCurrentIdOpenDel,
     fetchMemos,
     refetchMemos,
     handleSortIdDateChange,

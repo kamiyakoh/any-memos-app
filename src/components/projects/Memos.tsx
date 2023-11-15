@@ -23,11 +23,13 @@ export const Memos: FC<Props> = ({ isShowBgPreview, onClickShowBgPreview }) => {
   const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
   const setPickCatategories = useSetRecoilState(pickCategoriesState);
   const {
+    currentIdOpenDel,
     sortIdDate,
     pickDateDiff,
     pickMarkDiv,
     showMemos,
     categories,
+    setCurrentIdOpenDel,
     handleSortIdDateChange,
     handlePickDiffChange,
     handleMarkDivChange,
@@ -134,7 +136,14 @@ export const Memos: FC<Props> = ({ isShowBgPreview, onClickShowBgPreview }) => {
         </div>
       </FrostedGlass>
       <div className="flex flex-wrap w-full max-w-[1920px] gap-4 mx-auto">
-        {showMemos?.map((memo) => <Memo key={memo.id} memo={memo} />)}
+        {showMemos?.map((memo) => (
+          <Memo
+            key={memo.id}
+            memo={memo}
+            currentIdOpenDel={currentIdOpenDel}
+            setCurrentIdOpenDel={setCurrentIdOpenDel}
+          />
+        ))}
       </div>
       {isShowBgPreview || (
         <Modal

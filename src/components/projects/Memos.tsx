@@ -1,7 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { useMemos } from '../../hooks/useMemos';
-import { useMenu } from '../../hooks/useMenu';
 import { pickCategoriesState } from '../../states/pickCategoriesState';
 import { sortIdDateRadio, pickDateDiffRadio, pickMarkDivRadio } from '../../utils/const';
 import { Button } from '../uiParts/Button';
@@ -13,12 +12,16 @@ import { Category } from '../../components/projects/Category';
 import { New } from './New';
 import menuIcon from '../../assets/img/menuIcon.png';
 
-export const Memos: FC = () => {
+interface Props {
+  isShowBgPreview: boolean;
+  onClickShowBgPreview: () => void;
+}
+
+export const Memos: FC<Props> = ({ isShowBgPreview, onClickShowBgPreview }) => {
   const [isOpenCategory, setIsOpenCategory] = useState<boolean>(false);
   const [isOpenNew, setIsOpenNew] = useState<boolean>(false);
   const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
   const setPickCatategories = useSetRecoilState(pickCategoriesState);
-  const { isShowBgPreview } = useMenu();
   const {
     sortIdDate,
     pickDateDiff,
@@ -142,7 +145,7 @@ export const Memos: FC = () => {
             setIsOpenMenu(false);
           }}
         >
-          <Menu />
+          <Menu onClickShowBgPreview={onClickShowBgPreview} />
         </Modal>
       )}
       <Modal

@@ -11,11 +11,13 @@ import { Edit } from './Edit';
 
 interface Props {
   memo: MemoData;
+  currentIdOpenDel: string;
+  setCurrentIdOpenDel: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export const Memo: FC<Props> = ({ memo }) => {
+export const Memo: FC<Props> = ({ memo, currentIdOpenDel, setCurrentIdOpenDel }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { currentIdOpenDel, openDel, closeDel, delMemo, textFormatBr } = useMemoSingle();
+  const { openDel, closeDel, delMemo, textFormatBr } = useMemoSingle(currentIdOpenDel, setCurrentIdOpenDel);
 
   return (
     <FrostedGlass

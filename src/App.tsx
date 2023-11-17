@@ -13,7 +13,7 @@ worker.start(); // eslint-disable-line @typescript-eslint/no-floating-promises
 export const App: FC = () => {
   const { bgImg, bgFilter } = useApp();
   const { isAuth, isLoading, fetchIsAuth } = useLogin();
-  const { isShowBgPreview, onClickCloseBgPreview } = useMenu();
+  const { isShowBgPreview, onClickShowBgPreview, onClickCloseBgPreview } = useMenu();
 
   useEffect(() => {
     fetchIsAuth();
@@ -31,7 +31,7 @@ export const App: FC = () => {
         >
           {isShowBgPreview && <button className="w-full h-full" onClick={onClickCloseBgPreview} />}
         </div>
-        {isAuth && <Contents />}
+        {isAuth && <Contents isShowBgPreview={isShowBgPreview} onClickShowBgPreview={onClickShowBgPreview} />}
       </div>
       {!isLoading && (
         <Modal

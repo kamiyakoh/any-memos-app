@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import toast from 'react-hot-toast';
 import { menuOptionState } from '../states/menuOptionState';
-import { isShowBgPreviewState } from '../states/isShowBgPreviewState';
 import { bgImgOptions, bgFilterOptions } from '../utils/const';
 
 interface UseMenu {
@@ -23,7 +22,7 @@ interface UseMenu {
 
 export const useMenu = (): UseMenu => {
   const [menuOption, setMenuOption] = useRecoilState(menuOptionState);
-  const [isShowBgPreview, setIsShowBgPreview] = useRecoilState(isShowBgPreviewState);
+  const [isShowBgPreview, setIsShowBgPreview] = useState(false);
   const [isFixedBgImg, setIsFixedBgImg] = useState(false);
   const [isFixedBgFilter, setIsFixedBgFilter] = useState(false);
   useEffect(() => {

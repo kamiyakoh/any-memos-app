@@ -3,7 +3,11 @@ import { useMenu } from '../../hooks/useMenu';
 import { Button } from '../uiParts/Button';
 import { bgImgOptions, bgFilterOptions } from '../../utils/const';
 
-export const Menu: FC = () => {
+interface Props {
+  onClickShowBgPreview: () => void;
+}
+
+export const Menu: FC<Props> = ({ onClickShowBgPreview }) => {
   const {
     menuOption,
     isFixedBgImg,
@@ -13,7 +17,6 @@ export const Menu: FC = () => {
     handleAddMonth,
     handleAddHours,
     onClickErrorToast,
-    onClickShowBgPreview,
     onClickMenuReset,
   } = useMenu();
 

@@ -1,13 +1,16 @@
 import { FC, Suspense, useEffect } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { useMenu } from '../../hooks/useMenu';
 import { useContents } from '../../hooks/useContents';
 import { ScrollToTopButton } from '../uiParts/ScrollToTopButton';
 import { Memos } from '../projects/Memos';
 
-export const Contents: FC = () => {
+interface Props {
+  isShowBgPreview: boolean;
+  onClickShowBgPreview: () => void;
+}
+
+export const Contents: FC<Props> = ({ isShowBgPreview, onClickShowBgPreview }) => {
   const { contentsRef, isVisible, handleScroll, scrollToTop } = useContents();
-  const { isShowBgPreview } = useMenu();
 
   useEffect(() => {
     const contentsRefCurrent = contentsRef.current;
@@ -46,7 +49,7 @@ export const Contents: FC = () => {
               </div>
             }
           >
-            <Memos />
+            <Memos isShowBgPreview={isShowBgPreview} onClickShowBgPreview={onClickShowBgPreview} />
           </Suspense>
         </ErrorBoundary>
       </div>

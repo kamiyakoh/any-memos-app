@@ -34,7 +34,6 @@ export interface MemoData {
   date: string;
   markDiv: number;
 }
-
 export interface MenuOption {
   bgImg: BgImg;
   bgFilter: BgFilter;

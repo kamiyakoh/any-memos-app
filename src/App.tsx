@@ -6,8 +6,6 @@ import { useMenu } from './hooks/useMenu';
 import { worker } from './serviceWorker';
 import { Modal } from './components/uiParts/Modal';
 import { Login } from './components/projects/Login';
-import { NewButton } from './components/projects/NewButton';
-import { MenuButton } from './components/projects/MenuButton';
 import { Contents } from './components/pages/Contents';
 
 worker.start(); // eslint-disable-line @typescript-eslint/no-floating-promises
@@ -23,12 +21,6 @@ export const App: FC = () => {
 
   return (
     <div>
-      {isAuth && !isShowBgPreview && (
-        <div>
-          <NewButton />
-          <MenuButton />
-        </div>
-      )}
       <div className="h-full min-h-screen relative bg-center bg-cover" style={{ backgroundImage: `url(${bgImg})` }}>
         <div
           className="absolute top-0 left-0 z-0 w-full h-full bg-gradient-to-b"
@@ -42,8 +34,15 @@ export const App: FC = () => {
         {isAuth && <Contents />}
       </div>
       {!isLoading && (
-        <Modal isOpen={!isAuth} borderColorClass="border-violet-500" isLogin={true}>
-          {!isAuth && <Login />}
+        <Modal
+          addClassPanel="border-violet-500"
+          isOpen={!isAuth}
+          enableCloseButton={false}
+          onClose={() => {
+            console.log('required login');
+          }}
+        >
+          <Login />
         </Modal>
       )}
       <Toaster

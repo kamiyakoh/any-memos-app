@@ -1,22 +1,21 @@
+import { MemoData } from '../../types';
 import { FC } from 'react';
 import { useEdit } from '../../hooks/useEdit';
-import { useEditButton } from '../../hooks/useEditButton';
 import { Button } from '../uiParts/Button';
 import { DiffDays } from './DiffDays';
 import { WeekDayJa } from '../uiParts/WeekDayJa';
-import { MemoData } from '../../types';
 
 interface Props {
   memo: MemoData;
+  closeModal: () => void;
 }
 
-export const Edit: FC<Props> = ({ memo }) => {
-  const { closeEdit } = useEditButton();
-  const { watchDate, register, handleSubmit, editMemo } = useEdit(memo, closeEdit);
+export const Edit: FC<Props> = ({ memo, closeModal }) => {
+  const { watchDate, register, handleSubmit, editMemo } = useEdit(memo, closeModal);
 
   return (
     <div>
-      <form className="w-[80vw] max-w-screen-2xl" onSubmit={handleSubmit(editMemo)}>
+      <form onSubmit={handleSubmit(editMemo)}>
         <label htmlFor="title">
           ID： {memo.id}
           <br />

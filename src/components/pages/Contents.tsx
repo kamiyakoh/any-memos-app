@@ -4,7 +4,6 @@ import { useMenu } from '../../hooks/useMenu';
 import { useContents } from '../../hooks/useContents';
 import { ScrollToTopButton } from '../uiParts/ScrollToTopButton';
 import { Memos } from '../projects/Memos';
-import { Category } from '../../components/projects/Category';
 
 export const Contents: FC = () => {
   const { contentsRef, isVisible, handleScroll, scrollToTop } = useContents();
@@ -48,12 +47,11 @@ export const Contents: FC = () => {
             }
           >
             <Memos />
-            <Category />
           </Suspense>
         </ErrorBoundary>
       </div>
       <ScrollToTopButton
-        className={`fixed bottom-4 right-4 z-50 min-[1936px]:right-[calc((100%_-_1920px)_/_2)] ${
+        className={`fixed bottom-4 right-4 z-40 min-[1936px]:right-[calc((100%_-_1920px)_/_2)] ${
           isVisible ? 'block' : 'hidden'
         }`}
         onClick={scrollToTop}
